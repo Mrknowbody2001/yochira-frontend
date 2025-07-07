@@ -63,8 +63,8 @@ export default function SidebarMenu() {
                 Create Category
               </SidebarItem>
               <SidebarItem
-                href="?tab=CreateSubCategory"
-                active={tab === "CreateSubCategory"}
+                href="?tab=SubCategoryRegister"
+                active={tab === "SubCategoryRegister"}
               >
                 Create Sub-Category
               </SidebarItem>

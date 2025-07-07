@@ -1,9 +1,10 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import SidebarMenu from "../components/SideBar";
 
 import CategoryRegister from "../screens/categoryManagement/CategoryRegister";
 import ProductRegister from "../screens/productManagement/ProductRegister";
+import SubCategoryRegister from "../screens/categoryManagement/SubCategoryRegister";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -26,7 +27,7 @@ const Dashboard = () => {
         {tab === "productRegister" && <ProductRegister />}
 
         {tab === "CategoryRegister" && <CategoryRegister />}
-        {tab ==="SubCategoryRegister" && <CategoryRegister />}
+        {tab === "SubCategoryRegister" && <SubCategoryRegister />}
       </div>
     </div>
   );
