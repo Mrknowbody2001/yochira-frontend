@@ -16,6 +16,7 @@ import {
   HiTruck,
   HiCubeTransparent,
   HiArrowDownOnSquare,
+  HiClipboardDocumentCheck,
 } from "react-icons/hi2";
 import { HiClipboardCheck } from "react-icons/hi";
 import { useLocation } from "react-router-dom";
@@ -35,7 +36,7 @@ export default function SidebarMenu() {
     >
       <SidebarItems>
         <SidebarItemGroup>
-          <p className="text-sm font-semibold text-slate-400 mx-2">
+          <p className="text-sm font-semibold text-slate-400 mx-2 p-3">
             Master Data
           </p>
           <SidebarCollapse
@@ -71,7 +72,12 @@ export default function SidebarMenu() {
             </SidebarCollapse>
 
             <SidebarCollapse icon={HiUserGroup} label="Customer Management">
-              <SidebarItem href="#">Customer</SidebarItem>
+              <SidebarItem
+                href="?tab=CustomerRegister"
+                active={tab === "CustomerRegister"}
+              >
+                Customer
+              </SidebarItem>
               <SidebarItem href="#">Approve Customer</SidebarItem>
             </SidebarCollapse>
 
@@ -93,6 +99,17 @@ export default function SidebarMenu() {
               {/* <SidebarItem href="#">Raw Material Mapping</SidebarItem> */}
             </SidebarCollapse>
           </SidebarCollapse>
+        </SidebarItemGroup>
+
+        <SidebarItemGroup>
+          <p className="p-3 px-2 font-semibold text-slate-400">Manufacturing</p>
+          <SidebarItem
+            icon={HiClipboardDocumentCheck}
+            href="?tab=CoRegister"
+            active={tab === "CoRegister"}
+          >
+            Customer Order
+          </SidebarItem>
         </SidebarItemGroup>
       </SidebarItems>
     </Sidebar>

@@ -5,7 +5,9 @@ import SidebarMenu from "../components/SideBar";
 import CategoryRegister from "../screens/categoryManagement/CategoryRegister";
 import ProductRegister from "../screens/productManagement/ProductRegister";
 import SubCategoryRegister from "../screens/categoryManagement/SubCategoryRegister";
-
+import CustomerRegister from "../screens/customerManagement/CustomerRegister";
+import CoRegister from "../screens/customerOrder/CoRegister";
+import GetOneCO from "../screens/customerOrder/getOneCO";
 const Dashboard = () => {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -28,6 +30,16 @@ const Dashboard = () => {
 
         {tab === "CategoryRegister" && <CategoryRegister />}
         {tab === "SubCategoryRegister" && <SubCategoryRegister />}
+        {tab === "CustomerRegister" && <CustomerRegister />}
+        {tab === "CoRegister" && <CoRegister />}
+        {tab === "GetOneCO" && (
+          <GetOneCO
+            id={new URLSearchParams(window.location.search).get("id")}
+            onCancel={() => {
+              window.location.href = "/dashboard?tab=GetOneCO";
+            }}
+          />
+        )}
       </div>
     </div>
   );

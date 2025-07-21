@@ -42,7 +42,7 @@ const ProductForm = ({ onCancel }) => {
       setLoading(true);
       setError(false);
 
-      const res = await fetch(`${baseUrl}/api/product/create`, {
+      const res = await fetch(`http://localhost:5001/api/product/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,9 +66,12 @@ const ProductForm = ({ onCancel }) => {
   useEffect(() => {
     const fetchPreviewProductId = async () => {
       try {
-        const res = await fetch(`${baseUrl}/api/product/preview-id`, {
-          method: "GET",
-        });
+        const res = await fetch(
+          `http://localhost:5001/api/product/preview-id`,
+          {
+            method: "GET",
+          }
+        );
 
         if (!res.ok) {
           const errorData = await res.json();

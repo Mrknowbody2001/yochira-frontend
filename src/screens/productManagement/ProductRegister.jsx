@@ -34,7 +34,7 @@ const ProductRegister = () => {
   useEffect(() => {
     const fetchProductList = async () => {
       try {
-        const res = await fetch(`${baseUrl}/api/product`, {
+        const res = await fetch(`http://localhost:5001/api/product`, {
           method: "GET",
         });
         const data = await res.json();
