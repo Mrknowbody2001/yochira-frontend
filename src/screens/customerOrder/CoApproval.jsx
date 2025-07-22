@@ -21,7 +21,7 @@ const CustomerOrderApproval = () => {
       );
       const data = await res.json();
       const approvedOrders = (data.customerOrders || []).filter(
-        (order) => order.items[0]?.status === "approved"
+        (order) => order.status === "approved"
       );
       setCoList(approvedOrders);
     } catch (err) {
@@ -63,7 +63,7 @@ const CustomerOrderApproval = () => {
                 <TableRow key={orderIndex}>
                   <TableCell>{order.coNo}</TableCell>
                   <TableCell>{order.customerName}</TableCell>
-                  <TableCell>{order.items[0]?.status || "pending"}</TableCell>
+                  <TableCell>{order.status }</TableCell>
                   <TableCell>{order.orderDate?.slice(0, 10)}</TableCell>
                   <TableCell>{order.orderTotalValue}</TableCell>
                   <TableCell>{order.paymentStatus}</TableCell>

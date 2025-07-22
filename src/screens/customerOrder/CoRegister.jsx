@@ -99,7 +99,7 @@ const CoRegister = () => {
                         0
                       )}
                     </TableCell> */}
-                    <TableCell>{order.items[0]?.status || "pending"}</TableCell>
+                    <TableCell>{order.status}</TableCell>
                     <TableCell>{order.orderDate?.slice(0, 10)}</TableCell>
                     <TableCell>{order.orderTotalValue}</TableCell>
                     <TableCell>{order.paymentStatus}</TableCell>
