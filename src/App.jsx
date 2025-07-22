@@ -4,9 +4,12 @@ import { Route, Routes } from "react-router-dom";
 
 const App = () => {
   return (
-    
+    // <Routes>
+    //   <Route path="/dashboard" element={<Dashboard />} />
+    // </Routes>
     <Routes>
-      <Route path="/dashboard" element={<Dashboard />} />  
+      <Route path="/" element={<Dashboard />} />
+      <Route path="/dashboard" element={<Dashboard />} /> {/* ← ADD THIS */}
     </Routes>
   );
 };

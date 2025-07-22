@@ -8,6 +8,8 @@ import SubCategoryRegister from "../screens/categoryManagement/SubCategoryRegist
 import CustomerRegister from "../screens/customerManagement/CustomerRegister";
 import CoRegister from "../screens/customerOrder/CoRegister";
 import GetOneCO from "../screens/customerOrder/getOneCO";
+import CoApproval from "../screens/customerOrder/CoApproval";
+import PendingCO from "../screens/customerOrder/PendingCO";
 const Dashboard = () => {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -40,6 +42,8 @@ const Dashboard = () => {
             }}
           />
         )}
+        {tab === "CoApproval" && <CoApproval />}
+        {tab === "PendingCO" && <PendingCO />}
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ import {
 import React, { useState, useEffect } from "react";
 import COForm from "./COForm";
 import GetOneCO from "./getOneCO";
+import { Link } from "react-router-dom";
 
 const CoRegister = () => {
   const [showForm, setShowForm] = useState(false);
@@ -103,12 +104,12 @@ const CoRegister = () => {
                     <TableCell>{order.orderTotalValue}</TableCell>
                     <TableCell>{order.paymentStatus}</TableCell>
                     <TableCell>
-                      <a
-                        href={`/dashboard?tab=GetOneCO&id=${order._id}`}
+                      <Link
+                        to={`/dashboard?tab=GetOneCO&id=${order._id}`}
                         className="bg-green-700 hover:bg-green-800 text-white px-3 py-1 rounded"
                       >
                         View
-                      </a>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 ))}

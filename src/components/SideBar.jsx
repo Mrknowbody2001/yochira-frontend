@@ -103,13 +103,24 @@ export default function SidebarMenu() {
 
         <SidebarItemGroup>
           <p className="p-3 px-2 font-semibold text-slate-400">Manufacturing</p>
+          <SidebarCollapse
+           icon={HiClipboardDocumentCheck}
+           label="order Management">
           <SidebarItem
-            icon={HiClipboardDocumentCheck}
+           
             href="?tab=CoRegister"
             active={tab === "CoRegister"}
           >
             Customer Order
           </SidebarItem>
+           <SidebarItem
+           
+            href="?tab=CoApproval"
+            active={tab === "CoApproval"}
+          >
+            Customer Order Approval
+          </SidebarItem>
+          </SidebarCollapse>
         </SidebarItemGroup>
       </SidebarItems>
     </Sidebar>

@@ -17,6 +17,8 @@ const GetOneCO = () => {
     sellingPrice: "",
   });
   const [selectedItems, setSelectedItems] = useState([]);
+  const [newItems, setNewItems] = useState([]); //
+
   //
 
   useEffect(() => {
@@ -48,7 +50,7 @@ const GetOneCO = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAddProduct = async () => {
+  const handleAddProduct = () => {
     const product = products.find((p) => p.productId === formData.productId);
     if (!product || !formData.orderQty || !formData.sellingPrice) {
       alert("Invalid product details");
@@ -67,11 +69,19 @@ const GetOneCO = () => {
       status: "pending",
     };
 
-    const updatedItems = [...orderData.items, newItem];
-    const newTotal = updatedItems.reduce(
-      (sum, item) => sum + (item.itemTotalValue || 0),
-      0
-    );
+    setNewItems((prev) => [...prev, newItem]);
+    setFormData({
+      productSearch: "",
+      productId: "",
+      orderQty: "",
+      sellingPrice: "",
+    });
+  };
+
+  const handleUpdateOrder = async () => {
+    if (!orderData) return;
+
+    const updatedItems = [...orderData.items, ...newItems];
 
     const payload = {
       customerId: orderData.customerId,
@@ -91,12 +101,13 @@ const GetOneCO = () => {
       );
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Error");
-      alert("Product added to order successfully");
-      onSuccess();
-      onCancel();
+
+      alert("Order updated successfully");
+      setNewItems([]);
+      navigate("/dashboard?tab=CoRegister");
     } catch (err) {
       console.error("Failed to update order:", err.message);
-      alert("Failed to add product.");
+      alert("Failed to update order.");
     }
   };
 
@@ -255,6 +266,9 @@ const GetOneCO = () => {
       <div className="flex gap-4 mt-6">
         <Button color="green" onClick={handleAddProduct}>
           Add Product to Order
+        </Button>
+        <Button color="blue" onClick={handleUpdateOrder}>
+          Update Order
         </Button>
         <Button
           color="gray"
