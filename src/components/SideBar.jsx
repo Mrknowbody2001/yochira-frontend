@@ -94,9 +94,11 @@ export default function SidebarMenu() {
               icon={HiCubeTransparent}
               label="Raw-Material Management"
             >
-              <SidebarItem href="#">Raw-Material</SidebarItem>
-              <SidebarItem href="#">Raw-Material Approve</SidebarItem>
-              {/* <SidebarItem href="#">Raw Material Mapping</SidebarItem> */}
+              <SidebarItem href="?tab=RawMaterialRegister" active={tab === "RawMaterialRegister"}>
+                Raw-Material
+              </SidebarItem>
+              {/* <SidebarItem href="#">Raw-Material Approve</SidebarItem> */}
+              <SidebarItem href="#">Raw Material Mapping</SidebarItem>
             </SidebarCollapse>
           </SidebarCollapse>
         </SidebarItemGroup>
@@ -104,22 +106,15 @@ export default function SidebarMenu() {
         <SidebarItemGroup>
           <p className="p-3 px-2 font-semibold text-slate-400">Manufacturing</p>
           <SidebarCollapse
-           icon={HiClipboardDocumentCheck}
-           label="order Management">
-          <SidebarItem
-           
-            href="?tab=CoRegister"
-            active={tab === "CoRegister"}
+            icon={HiClipboardDocumentCheck}
+            label="order Management"
           >
-            Customer Order
-          </SidebarItem>
-           <SidebarItem
-           
-            href="?tab=CoApproval"
-            active={tab === "CoApproval"}
-          >
-            Customer Order Approval
-          </SidebarItem>
+            <SidebarItem href="?tab=CoRegister" active={tab === "CoRegister"}>
+              Customer Order
+            </SidebarItem>
+            <SidebarItem href="?tab=CoApproval" active={tab === "CoApproval"}>
+              Customer Order Approval
+            </SidebarItem>
           </SidebarCollapse>
         </SidebarItemGroup>
       </SidebarItems>

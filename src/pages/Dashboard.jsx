@@ -11,6 +11,8 @@ import GetOneCO from "../screens/customerOrder/getOneCO";
 import CoApproval from "../screens/customerOrder/CoApproval";
 import PendingCO from "../screens/customerOrder/PendingCO";
 import ApproveCustomerOrder from "../screens/customerOrder/ApproveCustomerOrder";
+import RawMaterialRegister from "../screens/raw-material/RawMaterialRegister";
+import RawMaterialForm from "../screens/raw-material/RawMaterialForm";
 const Dashboard = () => {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -35,6 +37,17 @@ const Dashboard = () => {
         {tab === "SubCategoryRegister" && <SubCategoryRegister />}
         {tab === "CustomerRegister" && <CustomerRegister />}
         {tab === "CoRegister" && <CoRegister />}
+        {tab === "RawMaterialRegister" && <RawMaterialRegister />}
+        {tab === "RawMaterialForm" && <RawMaterialForm />}
+        {tab === "CoRegister" && (
+          <CoRegister
+            id={new URLSearchParams(window.location.search).get("id")}
+            onCancel={() => {
+              window.location.href = "/dashboard?tab=CoRegister";
+            }}
+          />
+        )}
+
         {tab === "GetOneCO" && (
           <GetOneCO
             id={new URLSearchParams(window.location.search).get("id")}
