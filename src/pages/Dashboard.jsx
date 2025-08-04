@@ -13,6 +13,8 @@ import PendingCO from "../screens/customerOrder/PendingCO";
 import ApproveCustomerOrder from "../screens/customerOrder/ApproveCustomerOrder";
 import RawMaterialRegister from "../screens/raw-material/RawMaterialRegister";
 import RawMaterialForm from "../screens/raw-material/RawMaterialForm";
+import SupplierForm from "../screens/supplierManagement/SupplierForm";
+import SupplierRegister from "../screens/supplierManagement/SupplierRegister";
 const Dashboard = () => {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -39,6 +41,9 @@ const Dashboard = () => {
         {tab === "CoRegister" && <CoRegister />}
         {tab === "RawMaterialRegister" && <RawMaterialRegister />}
         {tab === "RawMaterialForm" && <RawMaterialForm />}
+        {tab === "SupplierForm" && <SupplierForm />}
+        {tab === "SupplierRegister" && <SupplierRegister />}
+
         {tab === "CoRegister" && (
           <CoRegister
             id={new URLSearchParams(window.location.search).get("id")}

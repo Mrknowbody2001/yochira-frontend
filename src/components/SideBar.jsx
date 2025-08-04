@@ -82,7 +82,12 @@ export default function SidebarMenu() {
             </SidebarCollapse>
 
             <SidebarCollapse icon={HiTruck} label="Supplier Management">
-              <SidebarItem href="#">Supplier</SidebarItem>
+              <SidebarItem
+                href="?tab=SupplierRegister"
+                active={tab === "SupplierRegister"}
+              >
+                Supplier
+              </SidebarItem>
               <SidebarItem href="#">Supplier Approval</SidebarItem>
               <SidebarItem href="#">Raw Material Mapping</SidebarItem>
             </SidebarCollapse>
@@ -94,7 +99,10 @@ export default function SidebarMenu() {
               icon={HiCubeTransparent}
               label="Raw-Material Management"
             >
-              <SidebarItem href="?tab=RawMaterialRegister" active={tab === "RawMaterialRegister"}>
+              <SidebarItem
+                href="?tab=RawMaterialRegister"
+                active={tab === "RawMaterialRegister"}
+              >
                 Raw-Material
               </SidebarItem>
               {/* <SidebarItem href="#">Raw-Material Approve</SidebarItem> */}
