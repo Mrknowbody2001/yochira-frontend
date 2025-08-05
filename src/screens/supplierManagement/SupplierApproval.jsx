@@ -7,28 +7,33 @@ import {
   TableCell,
 } from "flowbite-react";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const SupplierRegister = () => {
+const SupplierApproval = () => {
   const [supplierList, setSupplierList] = useState([]);
   const navigate = useNavigate();
 
+  // Fetch suppliers
   const fetchSuppliers = async () => {
     try {
       const res = await fetch(
         "http://localhost:5007/api/supplier/getAllSuppliers"
       );
       const data = await res.json();
-      setSupplierList(data.suppliers || []);
+
+      // Only suppliers with status = pending
+      const pendingSuppliers = (data.suppliers || []).filter(
+        (s) => s.status === "pending"
+      );
+      setSupplierList(pendingSuppliers);
     } catch (err) {
       console.error("Error loading supplier list:", err.message);
     }
   };
 
-  // Navigate to view supplier details
-  // const handleView = (id) => {
-  //   navigate(`/dashboard?tab=GetOneSupplier&id=${id}`);
-  // };
+  const handleView = (id) => {
+    navigate(`/dashboard/viewSupplier/${id}`);
+  };
 
   useEffect(() => {
     fetchSuppliers();
@@ -36,17 +41,8 @@ const SupplierRegister = () => {
 
   return (
     <div className="bg-[#172e75] text-white min-h-screen w-full p-6 rounded overflow-auto">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Supplier List</h2>
-        <button
-          onClick={() => navigate("/dashboard?tab=SupplierForm")}
-          className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-white"
-        >
-          NEW
-        </button>
-      </div>
-
-      <div className="w-full overflow-auto bg-[#243b55] border border-2 rounded p-4">
+      <h2 className="text-xl font-semibold mb-4">Supplier Approval List</h2>
+      <div className="w-full overflow-auto bg-[#243b55] border rounded p-4">
         <div className="min-w-[1000px] max-h-[500px] overflow-auto">
           <Table striped>
             <TableHead>
@@ -70,18 +66,12 @@ const SupplierRegister = () => {
                   <TableCell>{supplier.address}</TableCell>
                   <TableCell>{supplier.status}</TableCell>
                   <TableCell>
-                    <Link
-                      to={`/dashboard?tab=GetOneSupplier&id=${supplier._id}`}
-                      className="bg-green-700 hover:bg-green-800 text-white px-3 py-1 rounded"
-                    >
-                      View
-                    </Link>
-                    {/* <button
-                      onClick={() => handleView()}
+                    <button
+                      onClick={() => handleView(supplier._id)}
                       className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-white"
                     >
                       View
-                    </button> */}
+                    </button>
                   </TableCell>
                 </TableRow>
               ))}
@@ -93,4 +83,4 @@ const SupplierRegister = () => {
   );
 };
 
-export default SupplierRegister;
+export default SupplierApproval;

@@ -88,8 +88,12 @@ export default function SidebarMenu() {
               >
                 Supplier
               </SidebarItem>
-              <SidebarItem href="#">Supplier Approval</SidebarItem>
-              <SidebarItem href="#">Raw Material Mapping</SidebarItem>
+              <SidebarItem
+                href="?tab=SupplierApproval"
+                active={tab === "SupplierApproval"}
+              >
+                Supplier Approval
+              </SidebarItem>
             </SidebarCollapse>
 
             {/* <SidebarItem icon={HiCubeTransparent} href="#">
