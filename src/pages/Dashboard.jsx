@@ -17,6 +17,7 @@ import SupplierForm from "../screens/supplierManagement/SupplierForm";
 import SupplierRegister from "../screens/supplierManagement/SupplierRegister";
 import SupplierApproval from "../screens/supplierManagement/SupplierApproval";
 import GetOneSupplier from "../screens/supplierManagement/GetOneSupplier";
+import OneSupplierApproval from "../screens/supplierManagement/OneSupplierApproval";
 const Dashboard = () => {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -47,6 +48,7 @@ const Dashboard = () => {
         {tab === "SupplierRegister" && <SupplierRegister/>}
         {tab === "SupplierApproval" && <SupplierApproval />}
         {tab === "GetOneSupplier" && <GetOneSupplier />}
+        {tab === "OneSupplierApproval" && <OneSupplierApproval/>}
 
 
         {tab === "CoRegister" && (

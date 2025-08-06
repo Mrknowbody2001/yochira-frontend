@@ -7,7 +7,7 @@ import {
   TableCell,
 } from "flowbite-react";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SupplierApproval = () => {
   const [supplierList, setSupplierList] = useState([]);
@@ -66,12 +66,12 @@ const SupplierApproval = () => {
                   <TableCell>{supplier.address}</TableCell>
                   <TableCell>{supplier.status}</TableCell>
                   <TableCell>
-                    <button
-                      onClick={() => handleView(supplier._id)}
-                      className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-white"
+                    <Link
+                      to={`/dashboard?tab=OneSupplierApproval&id=${supplier._id}`}
+                      className="bg-green-700 hover:bg-green-800 text-white px-3 py-1 rounded"
                     >
                       View
-                    </button>
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}
