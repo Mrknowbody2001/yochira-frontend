@@ -18,6 +18,8 @@ import SupplierRegister from "../screens/supplierManagement/SupplierRegister";
 import SupplierApproval from "../screens/supplierManagement/SupplierApproval";
 import GetOneSupplier from "../screens/supplierManagement/GetOneSupplier";
 import OneSupplierApproval from "../screens/supplierManagement/OneSupplierApproval";
+import SORegister from "../screens/supplierOrder/SORegister";
+import SupplierMaterialMapping from "../screens/supplierOrder/SupplierMaterailMapping";
 const Dashboard = () => {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -45,11 +47,12 @@ const Dashboard = () => {
         {tab === "RawMaterialRegister" && <RawMaterialRegister />}
         {tab === "RawMaterialForm" && <RawMaterialForm />}
         {tab === "SupplierForm" && <SupplierForm />}
-        {tab === "SupplierRegister" && <SupplierRegister/>}
+        {tab === "SupplierRegister" && <SupplierRegister />}
         {tab === "SupplierApproval" && <SupplierApproval />}
         {tab === "GetOneSupplier" && <GetOneSupplier />}
-        {tab === "OneSupplierApproval" && <OneSupplierApproval/>}
-
+        {tab === "OneSupplierApproval" && <OneSupplierApproval />}
+        {tab === "SORegister" && <SORegister />}
+        {tab === "SupplierMaterialMapping" && <SupplierMaterialMapping />}
 
         {tab === "CoRegister" && (
           <CoRegister

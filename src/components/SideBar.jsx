@@ -110,7 +110,8 @@ export default function SidebarMenu() {
                 Raw-Material
               </SidebarItem>
               {/* <SidebarItem href="#">Raw-Material Approve</SidebarItem> */}
-              <SidebarItem href="#">Raw Material Mapping</SidebarItem>
+              <SidebarItem href="?tab=SupplierMaterialMapping"
+                active={tab === "SupplierMaterialMapping"}>Raw Material Mapping</SidebarItem>
             </SidebarCollapse>
           </SidebarCollapse>
         </SidebarItemGroup>
@@ -126,6 +127,9 @@ export default function SidebarMenu() {
             </SidebarItem>
             <SidebarItem href="?tab=CoApproval" active={tab === "CoApproval"}>
               Customer Order Approval
+            </SidebarItem>
+            <SidebarItem href="?tab=SORegister" active={tab === "SORegister"}>
+              Supplier Order
             </SidebarItem>
           </SidebarCollapse>
         </SidebarItemGroup>
