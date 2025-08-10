@@ -20,7 +20,7 @@ const SupplierMaterialMapping = () => {
   const [mappedMaterials, setMappedMaterials] = useState([]);
   const [existingMappings, setExistingMappings] = useState([]);
 
-  // Fetch all suppliers
+  // Fetch only approved  suppliers
   useEffect(() => {
     fetch(
       "http://localhost:5007/api/supplier/getAllApprovedSuppliers?status=approved"
@@ -32,7 +32,7 @@ const SupplierMaterialMapping = () => {
 
   // Fetch all materials
   useEffect(() => {
-    fetch("http://localhost:5007/api/materials/all")
+    fetch("http://localhost:5007/api/materials/all-materials")
       .then((res) => res.json())
       .then((data) => setMaterials(data.materials || []))
       .catch((err) => {
