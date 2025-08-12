@@ -7,7 +7,7 @@ import {
   TableCell,
 } from "flowbite-react";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SupplierOrderRegister = () => {
   const [orderList, setOrderList] = useState([]);
@@ -16,25 +16,15 @@ const SupplierOrderRegister = () => {
   // Fetch supplier orders from the backend
   const fetchOrders = async () => {
     try {
-      const res = await fetch("http://localhost:5006/api/supplier-orders/");
+      const res = await fetch("http://localhost:5007/api/supplier-orders/all");
       const data = await res.json();
-      setOrderList(data.orders || []);
+      setOrderList(data || []);
     } catch (err) {
       console.error("Error loading order list:", err.message);
     }
   };
 
-  // Delete an order
-  const handleDelete = async (id) => {
-    try {
-      await fetch(`http://localhost:5006/api/supplier-orders/delete/${id}`, {
-        method: "DELETE",
-      });
-      fetchOrders();
-    } catch (err) {
-      console.error("Delete failed:", err.message);
-    }
-  };
+ 
 
   useEffect(() => {
     fetchOrders();
@@ -63,14 +53,15 @@ const SupplierOrderRegister = () => {
                 <TableHeadCell>Date Created</TableHeadCell>
                 <TableHeadCell>Payment Type</TableHeadCell>
                 <TableHeadCell>Delivery Date</TableHeadCell>
-                <TableHeadCell>Total Price</TableHeadCell>
+                <TableHeadCell>Total Value</TableHeadCell>
+                <TableHeadCell>Order Status</TableHeadCell>
                 <TableHeadCell>Action</TableHeadCell>
               </TableRow>
             </TableHead>
             <TableBody className="divide-y">
               {orderList.map((order, index) => (
                 <TableRow key={index}>
-                  <TableCell>{order.soNumber}</TableCell>
+                  <TableCell>{order.SONo}</TableCell>
                   <TableCell>{order.supplierId}</TableCell>
                   <TableCell>{order.supplierName}</TableCell>
                   <TableCell>
@@ -84,22 +75,15 @@ const SupplierOrderRegister = () => {
                       ? new Date(order.deliveryDate).toLocaleDateString()
                       : ""}
                   </TableCell>
-                  <TableCell>{order.totalPrice}</TableCell>
+                  <TableCell>{order.orderTotalValue}</TableCell>
+                  <TableCell>{order.status}</TableCell>
                   <TableCell>
-                    <button
-                      onClick={() => {
-                        if (
-                          window.confirm(
-                            "Are you sure you want to delete this order?"
-                          )
-                        ) {
-                          handleDelete(order._id);
-                        }
-                      }}
-                      className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-white"
+                      <Link
+                      to={`/dashboard?tab=GetOneSupplierOrder&id=${order._id}`}
+                      className="bg-green-700 hover:bg-green-800 text-white px-3 py-1 rounded"
                     >
-                      Delete
-                    </button>
+                      View
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}

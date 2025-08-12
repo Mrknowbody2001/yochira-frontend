@@ -131,6 +131,7 @@ export default function SidebarMenu() {
             <SidebarItem href="?tab=SORegister" active={tab === "SORegister"}>
               Supplier Order
             </SidebarItem>
+            
           </SidebarCollapse>
         </SidebarItemGroup>
       </SidebarItems>

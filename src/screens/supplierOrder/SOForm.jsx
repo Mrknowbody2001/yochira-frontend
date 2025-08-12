@@ -7,37 +7,42 @@ import {
   Button,
   Card,
 } from "flowbite-react";
+import { matchPath, useNavigate } from "react-router-dom";
 
-const SupplierOrderForm = ({ onCancel, onSuccess }) => {
+const SupplierOrderForm = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [materials, setMaterials] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [formData, setFormData] = useState({
-    soNo: "",
+    SONo: "",
     date: new Date().toISOString().split("T")[0],
     supplierId: "",
-    paymentType: "Cash",
+    paymentType: "cash",
     deliveryDate: "",
-    remarks: "",
+    remark: "",
     materialId: "",
+    materialName: "",
     qty: "",
     unitPrice: "",
     unitName: "",
   });
 
+  const navigate = useNavigate();
   // Fetch suppliers + SO number
   useEffect(() => {
-    fetch("http://localhost:5007/api/supplier/getAllApprovedSuppliers?status=approved")
+    fetch(
+      "http://localhost:5007/api/supplier/getAllApprovedSuppliers?status=approved"
+    )
       .then((res) => res.json())
       .then((data) => setSuppliers(data.suppliers || []))
       .catch(() => setSuppliers([]));
 
-    fetch("http://localhost:5007/api/supplier-order/new-so-number")
-      .then((res) => res.json())
-      .then((data) =>
-        setFormData((prev) => ({ ...prev, soNo: data.soNumber || "ERROR" }))
-      )
-      .catch(() => {});
+    // fetch("http://localhost:5007/api/supplier-order/new-so-number")
+    //   .then((res) => res.json())
+    //   .then((data) =>
+    //     setFormData((prev) => ({ ...prev, soNo: data.soNumber || "ERROR" }))
+    //   )
+    //   .catch(() => {});
   }, []);
 
   // Fetch mapped materials when supplier changes
@@ -49,15 +54,37 @@ const SupplierOrderForm = ({ onCancel, onSuccess }) => {
       .catch(() => setMaterials([]));
   }, [formData.supplierId]);
 
+  //get sono
+
+  useEffect(() => {
+    const fetchSONo = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:5007/api/supplier-orders/SoNo"
+        );
+        const data = await res.json();
+        setFormData((prev) => ({
+          ...prev,
+          SONo: data.SONo || "ERROR",
+        }));
+      } catch (err) {
+        console.error("Failed to fetch SONo", err);
+      }
+    };
+
+    fetchSONo();
+  }, []);
   // When material selected → auto fill price & unit
   const handleMaterialSelect = (materialId) => {
     const mat = materials.find((m) => m.materialId === materialId);
     if (!mat) return;
     setFormData((prev) => ({
       ...prev,
-      materialId,
-      unitPrice: mat.unitPrice || 0,
-      unitName: mat.unitName || "",
+      materialId: mat.materialId,
+      materialName: mat.materialName,
+      unitPrice: Number(mat.defaultUnitPrice) || 0, // <== FIXED here
+      unitName: mat.unit,
+      qty: "",
     }));
   };
 
@@ -69,43 +96,64 @@ const SupplierOrderForm = ({ onCancel, onSuccess }) => {
   const handleAddMaterial = () => {
     if (!formData.materialId || !formData.qty) return;
     const mat = materials.find((m) => m.materialId === formData.materialId);
+    if (!mat) {
+      console.error("Material not found in the materials list");
+      return;
+    }
+
     const item = {
       materialId: mat.materialId,
       materialName: mat.materialName,
       qty: Number(formData.qty),
-      unitPrice: Number(formData.unitPrice),
-      unitName: formData.unitName,
-      total: totalValueForOne,
+      unitPrice: Number(mat.defaultUnitPrice), // <== FIXED here
+      unitName: mat.unit,
+      value: totalValueForOne,
     };
     setSelectedItems((prev) => [...prev, item]);
     setFormData((prev) => ({
       ...prev,
       materialId: "",
+      materialName: "",
       qty: "",
-      unitPrice: "",
+      unitPrice: 0,
       unitName: "",
     }));
   };
 
-  const grandTotal = selectedItems.reduce((sum, i) => sum + i.total, 0);
+  const grandTotal = selectedItems.reduce((sum, i) => sum + i.value, 0);
 
   const handleSaveOrder = async () => {
-    if (!formData.supplierId || selectedItems.length === 0) {
-      alert("Supplier and at least one material required.");
+    if (!formData.supplierId) {
+      alert("Please select a supplier.");
       return;
     }
+    if (!formData.deliveryDate) {
+      alert("Please select a delivery date.");
+      return;
+    }
+    if (selectedItems.length === 0) {
+      alert("Please add at least one material.");
+      return;
+    }
+
+    // Prepare payload matching backend expected field names
     const orderPayload = {
-      soNo: formData.soNo,
-      date: formData.date,
+      SONo: formData.SONo,
       supplierId: formData.supplierId,
       paymentType: formData.paymentType,
       deliveryDate: formData.deliveryDate,
-      remarks: formData.remarks,
-      items: selectedItems,
+      remark: formData.remark, // note: backend expects "remark" (singular)
+      items: selectedItems.map(({ value, unitPrice, ...rest }) => ({
+        ...rest,
+        unitPrice: Number(unitPrice), // ensure number
+        value: Number(value), // ensure number
+      })),
+      orderTotalValue: grandTotal,
     };
+    console.log("Order Payload:", orderPayload); // debug before sending
     try {
       const res = await fetch(
-        "http://localhost:5007/api/supplier-order/create",
+        "http://localhost:5007/api/supplier-orders/create",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -113,13 +161,12 @@ const SupplierOrderForm = ({ onCancel, onSuccess }) => {
         }
       );
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
+      if (!res.ok) throw new Error(data.message || "Unknown error");
       alert("Supplier Order created successfully");
-      onSuccess();
-      onCancel();
+      navigate("/dashboard?tab=SORegister");
     } catch (err) {
       console.error(err);
-      alert("Failed to create supplier order.");
+      alert(`Failed to create supplier order: ${err.message}`);
     }
   };
 
@@ -131,8 +178,8 @@ const SupplierOrderForm = ({ onCancel, onSuccess }) => {
       <Card className="bg-gray-800 mb-6">
         <div className="grid grid-cols-3 gap-4">
           <div>
-            <Label htmlFor="soNo">SO No</Label>
-            <TextInput id="soNo" name="soNo" value={formData.soNo} readOnly />
+            <Label htmlFor="SONo">SO No</Label>
+            <TextInput id="SONo" name="SONo" value={formData.SONo} readOnly />
           </div>
           <div>
             <Label htmlFor="date">Date</Label>
@@ -170,9 +217,9 @@ const SupplierOrderForm = ({ onCancel, onSuccess }) => {
                 setFormData((p) => ({ ...p, paymentType: e.target.value }))
               }
             >
-              <option value="Cash">Cash</option>
-              <option value="Cheque">Cheque</option>
-              <option value="Card">Card</option>
+              <option value="cash">Cash</option>
+              <option value="cheque">Cheque</option>
+              <option value="card">Card</option>
             </Select>
           </div>
           <div>
@@ -189,10 +236,10 @@ const SupplierOrderForm = ({ onCancel, onSuccess }) => {
           <div className="col-span-3">
             <Label htmlFor="remarks">Remarks</Label>
             <Textarea
-              name="remarks"
-              value={formData.remarks}
+              name="remark"
+              value={formData.remark}
               onChange={(e) =>
-                setFormData((p) => ({ ...p, remarks: e.target.value }))
+                setFormData((p) => ({ ...p, remark: e.target.value }))
               }
             />
           </div>
@@ -236,7 +283,7 @@ const SupplierOrderForm = ({ onCancel, onSuccess }) => {
           </div>
           <div>
             <Label>Total</Label>
-            <TextInput readOnly value={totalValueForOne} />
+            <TextInput readOnly value={totalValueForOne.toFixed(2)} />
           </div>
         </div>
 
@@ -263,9 +310,9 @@ const SupplierOrderForm = ({ onCancel, onSuccess }) => {
                     <td className="px-4 py-2">{i.materialId}</td>
                     <td className="px-4 py-2">{i.materialName}</td>
                     <td className="px-4 py-2">{i.qty}</td>
-                    <td className="px-4 py-2">{i.unitPrice}</td>
+                    <td className="px-4 py-2">{i.unitPrice.toFixed(2)}</td>
                     <td className="px-4 py-2">{i.unitName}</td>
-                    <td className="px-4 py-2">{i.total}</td>
+                    <td className="px-4 py-2">{i.value.toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -274,7 +321,7 @@ const SupplierOrderForm = ({ onCancel, onSuccess }) => {
                   <td colSpan="5" className="text-right px-4 py-2">
                     Grand Total
                   </td>
-                  <td className="px-4 py-2">{grandTotal}</td>
+                  <td className="px-4 py-2">{grandTotal.toFixed(2)}</td>
                 </tr>
               </tfoot>
             </table>
@@ -287,7 +334,10 @@ const SupplierOrderForm = ({ onCancel, onSuccess }) => {
         <Button color="green" onClick={handleSaveOrder}>
           Save Order
         </Button>
-        <Button color="gray" onClick={onCancel}>
+        <Button
+          color="gray"
+          onClick={() => navigate("/dashboard?tab=SORegister")}
+        >
           Cancel
         </Button>
       </div>
