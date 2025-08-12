@@ -170,6 +170,46 @@ const SupplierOrderForm = () => {
     }
   };
 
+  //! Remove material from selected items
+  const handleRemoveMaterial = async (materialId) => {
+  if (!formData.supplierId) {
+    alert("Please select a supplier before removing materials.");
+    return;
+  }
+
+  if (!window.confirm("Are you sure you want to remove this material?")) {
+    return;
+  }
+
+  try {
+    const res = await fetch(
+      `http://localhost:5007/api/mapping/removeMaterial-Mapping`,
+      {
+        method: "put",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          supplierId: formData.supplierId,
+          materialId: materialId,
+        }),
+      }
+    );
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Failed to remove material");
+
+    // Update frontend list
+    setSelectedItems((prev) =>
+      prev.filter((item) => item.materialId !== materialId)
+    );
+
+    alert("Material removed successfully.");
+  } catch (err) {
+    console.error(err);
+    alert(`Error: ${err.message}`);
+  }
+};
+
+
   return (
     <div className="p-6 bg-gray-900 text-white rounded-lg">
       <h2 className="text-xl font-semibold mb-4">Supplier Order Register</h2>
@@ -302,6 +342,7 @@ const SupplierOrderForm = () => {
                   <th className="px-4 py-2">Unit Price</th>
                   <th className="px-4 py-2">Unit Name</th>
                   <th className="px-4 py-2">Total</th>
+                  <th className="px-4 py-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -313,6 +354,15 @@ const SupplierOrderForm = () => {
                     <td className="px-4 py-2">{i.unitPrice.toFixed(2)}</td>
                     <td className="px-4 py-2">{i.unitName}</td>
                     <td className="px-4 py-2">{i.value.toFixed(2)}</td>
+                    <td className="px-4 py-2">
+                      <Button
+                        color="failure"
+                        size="xs"
+                        onClick={() => handleRemoveMaterial(i.materialId)}
+                      >
+                        Remove
+                      </Button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

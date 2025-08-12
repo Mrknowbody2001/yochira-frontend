@@ -202,6 +202,44 @@ export default function GetOneSupplierOrder() {
 
   if (loading) return <p>Loading...</p>;
 
+  const handleRemoveMaterial = async (materialId) => {
+    if (!formData.supplierId) {
+      alert("Please select a supplier before removing materials.");
+      return;
+    }
+
+    if (!window.confirm("Are you sure you want to remove this material?")) {
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `http://localhost:5007/api/mapping/removeMaterial-Mapping`,
+        {
+          method: "put",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            supplierId: formData.supplierId,
+            materialId: materialId,
+          }),
+        }
+      );
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to remove material");
+
+      // Update frontend list
+      setSelectedItems((prev) =>
+        prev.filter((item) => item.materialId !== materialId)
+      );
+
+      alert("Material removed successfully.");
+    } catch (err) {
+      console.error(err);
+      alert(`Error: ${err.message}`);
+    }
+  };
+
   return (
     <div className="p-6 bg-gray-900 text-white rounded-lg">
       <h2 className="text-xl font-semibold mb-4">Update Supplier Order</h2>
@@ -309,6 +347,7 @@ export default function GetOneSupplierOrder() {
                   <th>Unit Price</th>
                   <th>Unit Name</th>
                   <th>Total</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -317,14 +356,24 @@ export default function GetOneSupplierOrder() {
                     <td>{i.materialId}</td>
                     <td>{i.materialName}</td>
                     <td>{i.qty}</td>
-                    <td>{i.unitPrice.toFixed(2)}</td>
+                    <td>{(i.unitPrice ?? 0).toFixed(2)}</td>
                     <td>{i.unitName}</td>
-                    <td>{i.value.toFixed(2)}</td>
+                    <td>{(i.value ?? 0).toFixed(2)}</td>
+                    <td>
+                      {" "}
+                      <Button
+                        color="failure"
+                        size="xs"
+                        onClick={() => handleRemoveMaterial(i.materialId)}
+                      >
+                        Remove
+                      </Button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
               <tfoot>
-                <tr className="bg-gray-700 font-semibold">
+                <tr className="bg-gray-700 font-semibold ">
                   <td colSpan="5" className="text-right px-4 py-2">
                     Grand Total
                   </td>

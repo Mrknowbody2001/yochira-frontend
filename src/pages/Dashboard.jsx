@@ -22,6 +22,8 @@ import SORegister from "../screens/supplierOrder/SORegister";
 import SupplierMaterialMapping from "../screens/supplierOrder/SupplierMaterailMapping";
 import SupplierOrderForm from "../screens/supplierOrder/SOForm";
 import GetOneSupplierOrder from "../screens/supplierOrder/getOneSupplierOrder";
+import PendingSO from "../screens/supplierOrder/PendingSO";
+import GetOnePendingSo from "../screens/supplierOrder/GetOnePendingSo";
 const Dashboard = () => {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -56,7 +58,10 @@ const Dashboard = () => {
         {tab === "SORegister" && <SORegister />}
         {tab === "SupplierMaterialMapping" && <SupplierMaterialMapping />}
         {tab === "GetOneSupplierOrder" && <GetOneSupplierOrder />}
-      {tab === "SupplierOrderForm" && <SupplierOrderForm/>}
+        {tab === "PendingSO" && <PendingSO />}
+        {tab === "SupplierOrderForm" && <SupplierOrderForm />}
+        {tab === "GetOnePendingSo" && <GetOnePendingSo />}
+
         {tab === "CoRegister" && (
           <CoRegister
             id={new URLSearchParams(window.location.search).get("id")}
