@@ -17,6 +17,7 @@ export default function GetOneSupplierOrder() {
   const [formData, setFormData] = useState({
     SONo: "",
     supplierId: "",
+    supplierName: "",
     paymentType: "",
     deliveryDate: "",
     remark: "",
@@ -59,6 +60,7 @@ export default function GetOneSupplierOrder() {
         setFormData({
           SONo: order.SONo || "",
           supplierId: order.supplierId || "",
+          supplierName: order.supplierName || "",
           paymentType: order.paymentType || "",
           deliveryDate: order.deliveryDate
             ? order.deliveryDate.split("T")[0]
@@ -253,7 +255,7 @@ export default function GetOneSupplierOrder() {
           </div>
           <div>
             <Label>Supplier</Label>
-            <TextInput value={formData.supplierId} readOnly />
+            <TextInput value={`${formData.supplierId} - ${formData.supplierName}`} readOnly />
           </div>
           <div>
             <Label>Payment Type</Label>

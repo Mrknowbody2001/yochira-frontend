@@ -59,7 +59,7 @@ export default function GetOnePendingSo() {
     : 0;
 
   return (
-    <div className="p-6 bg-gray-900 text-white rounded-lg max-w-5xl mx-auto">
+    <div className="p-6 bg-gray-900 text-white rounded-lg ">
       <h2 className="text-xl font-semibold mb-4">Pending Supplier Order Details</h2>
 
       <Card className="bg-gray-800 mb-6">
@@ -69,8 +69,8 @@ export default function GetOnePendingSo() {
             <p className="mt-1 text-white">{order.SONo}</p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300">Supplier ID</label>
-            <p className="mt-1 text-white">{order.supplierId}</p>
+            <label className="block text-sm font-medium text-gray-300">Supplier </label>
+            <p className="mt-1 text-white">{order.supplierId}-{order.supplierName}</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-300">Delivery Date</label>
