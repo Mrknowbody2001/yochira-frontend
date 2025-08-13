@@ -142,7 +142,7 @@ const SupplierOrderForm = () => {
       supplierId: formData.supplierId,
       paymentType: formData.paymentType,
       deliveryDate: formData.deliveryDate,
-      remark: formData.remark, // note: backend expects "remark" (singular)
+      remark: formData.remark, 
       items: selectedItems.map(({ value, unitPrice, ...rest }) => ({
         ...rest,
         unitPrice: Number(unitPrice), // ensure number

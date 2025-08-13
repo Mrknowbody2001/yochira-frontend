@@ -24,6 +24,9 @@ import SupplierOrderForm from "../screens/supplierOrder/SOForm";
 import GetOneSupplierOrder from "../screens/supplierOrder/getOneSupplierOrder";
 import PendingSO from "../screens/supplierOrder/PendingSO";
 import GetOnePendingSo from "../screens/supplierOrder/GetOnePendingSo";
+import SOReceiveNoteList from "../screens/SORManagement/SOReceiveNoteList";
+import ApprovedSOList from "../screens/SORManagement/ApprovedSOList";
+import GetOneApprovedSo from "../screens/SORManagement/GetOneApprovedSo";
 const Dashboard = () => {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -61,7 +64,14 @@ const Dashboard = () => {
         {tab === "PendingSO" && <PendingSO />}
         {tab === "SupplierOrderForm" && <SupplierOrderForm />}
         {tab === "GetOnePendingSo" && <GetOnePendingSo />}
+        {tab === "SOReceiveNoteList" && <SOReceiveNoteList />}
+        {tab === "ApprovedSOList" && <ApprovedSOList />}
+        {tab === "SOReceiveNoteList" && <SOReceiveNoteList />}
+        {tab === "GetOneApprovedSo" && <GetOneApprovedSo/>}
 
+        
+
+      {/* customer order section  */}
         {tab === "CoRegister" && (
           <CoRegister
             id={new URLSearchParams(window.location.search).get("id")}
@@ -82,6 +92,8 @@ const Dashboard = () => {
         {tab === "CoApproval" && <CoApproval />}
         {tab === "PendingCO" && <PendingCO />}
         {tab === "ApproveCustomerOrder" && <ApproveCustomerOrder />}
+
+
       </div>
     </div>
   );

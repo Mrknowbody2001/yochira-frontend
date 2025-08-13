@@ -16,7 +16,9 @@ export default function GetOnePendingSo() {
     const fetchOrder = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:5007/api/supplier-orders/${id}`);
+        const res = await fetch(
+          `http://localhost:5007/api/supplier-orders/${id}`
+        );
         if (!res.ok) throw new Error("Failed to fetch order");
         const data = await res.json();
         setOrder(data);
@@ -35,9 +37,12 @@ export default function GetOnePendingSo() {
 
     try {
       setApproving(true);
-      const res = await fetch(`http://localhost:5007/api/supplier-orders/approve/${id}`, {
-        method: "PUT",
-      });
+      const res = await fetch(
+        `http://localhost:5007/api/supplier-orders/approve/${id}`,
+        {
+          method: "PUT",
+        }
+      );
       if (!res.ok) throw new Error("Failed to approve order");
 
       alert("Order approved successfully!");
@@ -55,32 +60,70 @@ export default function GetOnePendingSo() {
 
   // Calculate grand total from order.items
   const grandTotal = order.items
-    ? order.items.reduce((sum, i) => sum + (i.value ?? (i.qty * (i.unitPrice ?? 0))), 0)
+    ? order.items.reduce(
+        (sum, i) => sum + (i.value ?? i.qty * (i.unitPrice ?? 0)),
+        0
+      )
     : 0;
 
   return (
     <div className="p-6 bg-gray-900 text-white rounded-lg ">
-      <h2 className="text-xl font-semibold mb-4">Pending Supplier Order Details</h2>
+      <h2 className="text-xl font-semibold mb-4">
+        Pending Supplier Order Details
+      </h2>
 
       <Card className="bg-gray-800 mb-6">
-        <div className="grid grid-cols-3 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-300">SO No</label>
+        <div className="grid grid-cols-3 gap-4 ">
+          <div className="m-2">
+            <label className="block text-sm font-medium text-gray-300">
+              SO No
+            </label>
             <p className="mt-1 text-white">{order.SONo}</p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300">Supplier </label>
-            <p className="mt-1 text-white">{order.supplierId}-{order.supplierName}</p>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-300">Delivery Date</label>
+            <label className="block text-sm font-medium text-gray-300">
+              Supplier{" "}
+            </label>
             <p className="mt-1 text-white">
-              {order.deliveryDate ? new Date(order.deliveryDate).toLocaleDateString() : "-"}
+              {order.supplierId}-{order.supplierName}
             </p>
           </div>
-          <div className="col-span-3">
-            <label className="block text-sm font-medium text-gray-300">Remarks</label>
-            <p className="mt-1 text-white whitespace-pre-wrap">{order.remark || "-"}</p>
+          <div>
+            <label className="block text-sm font-medium text-gray-300">
+              Delivery Date
+            </label>
+            <p className="mt-1 text-white">
+              {order.deliveryDate
+                ? new Date(order.deliveryDate).toLocaleDateString()
+                : "-"}
+            </p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-300">
+              Create Date
+            </label>
+            <p className="mt-1 text-white">
+              {order.createdAt
+                ? new Date(order.createdAt).toLocaleDateString()
+                : "-"}
+            </p>
+          </div>
+
+          <div className="block ">
+            <label className="block text-sm font-medium text-gray-300">
+              Remarks
+            </label>
+            <p className="mt-1 text-white whitespace-pre-wrap">
+              {order.remark || "-"}
+            </p>
+          </div>
+          <div className="bock ">
+            <label className="block text-sm font-medium text-gray-300">
+              Payment Type
+            </label>
+            <p className="mt-1 text-white whitespace-pre-wrap">
+              {order.paymentType || "-"}
+            </p>
           </div>
         </div>
       </Card>
@@ -106,9 +149,17 @@ export default function GetOnePendingSo() {
                     <td className="px-2 py-1">{item.materialId}</td>
                     <td className="px-2 py-1">{item.materialName}</td>
                     <td className="px-2 py-1">{item.qty}</td>
-                    <td className="px-2 py-1">{(item.unitPrice ?? 0).toFixed(2)}</td>
+                    <td className="px-2 py-1">
+                      {(item.unitPrice ?? 0).toFixed(2)}
+                    </td>
                     <td className="px-2 py-1">{item.unitName}</td>
-                    <td className="px-2 py-1">{((item.value ?? (item.qty * (item.unitPrice ?? 0))) ?? 0).toFixed(2)}</td>
+                    <td className="px-2 py-1">
+                      {(
+                        item.value ??
+                        item.qty * (item.unitPrice ?? 0) ??
+                        0
+                      ).toFixed(2)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -131,7 +182,10 @@ export default function GetOnePendingSo() {
         <Button color="green" onClick={handleApprove} disabled={approving}>
           {approving ? "Approving..." : "Approve"}
         </Button>
-        <Button color="gray" onClick={() => navigate("/dashboard?tab=PendingSo")}>
+        <Button
+          color="gray"
+          onClick={() => navigate("/dashboard?tab=PendingSO")}
+        >
           Cancel
         </Button>
       </div>
