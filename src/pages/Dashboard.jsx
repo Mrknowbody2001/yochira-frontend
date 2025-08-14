@@ -39,7 +39,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* side bar  */}
-      <div className="md:w-70 ">
+      <div className="md:w-65 ">
         <SidebarMenu />
       </div>
 
@@ -64,14 +64,12 @@ const Dashboard = () => {
         {tab === "PendingSO" && <PendingSO />}
         {tab === "SupplierOrderForm" && <SupplierOrderForm />}
         {tab === "GetOnePendingSo" && <GetOnePendingSo />}
-        {tab === "SOReceiveNoteList" && <SOReceiveNoteList />}
+
         {tab === "ApprovedSOList" && <ApprovedSOList />}
+        {tab === "GetOneApprovedSo" && <GetOneApprovedSo />}
         {tab === "SOReceiveNoteList" && <SOReceiveNoteList />}
-        {tab === "GetOneApprovedSo" && <GetOneApprovedSo/>}
 
-        
-
-      {/* customer order section  */}
+        {/* customer order section  */}
         {tab === "CoRegister" && (
           <CoRegister
             id={new URLSearchParams(window.location.search).get("id")}
@@ -92,8 +90,6 @@ const Dashboard = () => {
         {tab === "CoApproval" && <CoApproval />}
         {tab === "PendingCO" && <PendingCO />}
         {tab === "ApproveCustomerOrder" && <ApproveCustomerOrder />}
-
-
       </div>
     </div>
   );

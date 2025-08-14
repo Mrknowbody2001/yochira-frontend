@@ -36,34 +36,44 @@ export default function SidebarMenu() {
     >
       <SidebarItems>
         <SidebarItemGroup>
-          <p className="text-sm font-semibold text-slate-400 mx-2 p-3">
+          <p className="text-[15px] font-semibold text-slate-400 mx-2 py-3">
             Master Data
           </p>
           <SidebarCollapse
             icon={HiOutlineWrenchScrewdriver}
             label="Maintenance"
           >
-            <SidebarCollapse icon={HiCube} label="Product Management">
+            <SidebarCollapse
+              className="text-[14px]"
+              icon={HiCube}
+              label="Product Management"
+            >
               <SidebarItem
+                className="text-[14px]"
                 href="?tab=productRegister"
                 active={tab === "productRegister"}
               >
                 Register Product
               </SidebarItem>
-              <SidebarItem href="#">Product Approval</SidebarItem>
+              <SidebarItem href="#" className="text-[14px]">
+                Product Approval
+              </SidebarItem>
             </SidebarCollapse>
 
             <SidebarCollapse
+              className="text-[14px]"
               icon={HiArrowDownOnSquare}
               label="Category Management"
             >
               <SidebarItem
+                className="text-[14px]"
                 href="?tab=CategoryRegister"
                 active={tab === "CategoryRegister"}
               >
                 Create Category
               </SidebarItem>
               <SidebarItem
+                className="text-[14px]"
                 href="?tab=SubCategoryRegister"
                 active={tab === "SubCategoryRegister"}
               >
@@ -73,22 +83,31 @@ export default function SidebarMenu() {
 
             <SidebarCollapse icon={HiUserGroup} label="Customer Management">
               <SidebarItem
+                className="text-[14px]"
                 href="?tab=CustomerRegister"
                 active={tab === "CustomerRegister"}
               >
                 Customer
               </SidebarItem>
-              <SidebarItem href="#">Approve Customer</SidebarItem>
+              <SidebarItem href="#" className="text-[14px]">
+                Approve Customer
+              </SidebarItem>
             </SidebarCollapse>
 
-            <SidebarCollapse icon={HiTruck} label="Supplier Management">
+            <SidebarCollapse
+              className="text-[14px]"
+              icon={HiTruck}
+              label="Supplier Management"
+            >
               <SidebarItem
+                className="text-[14px]"
                 href="?tab=SupplierRegister"
                 active={tab === "SupplierRegister"}
               >
                 Supplier
               </SidebarItem>
               <SidebarItem
+                className="text-[14px]"
                 href="?tab=SupplierApproval"
                 active={tab === "SupplierApproval"}
               >
@@ -100,44 +119,73 @@ export default function SidebarMenu() {
               Raw Material Management
             </SidebarItem> */}
             <SidebarCollapse
+              className="text-[14px]"
               icon={HiCubeTransparent}
               label="Raw-Material Management"
             >
               <SidebarItem
+                className="text-[14px]"
                 href="?tab=RawMaterialRegister"
                 active={tab === "RawMaterialRegister"}
               >
                 Raw-Material
               </SidebarItem>
               {/* <SidebarItem href="#">Raw-Material Approve</SidebarItem> */}
-              <SidebarItem href="?tab=SupplierMaterialMapping"
-                active={tab === "SupplierMaterialMapping"}>Raw Material Mapping</SidebarItem>
+              <SidebarItem
+              className="text-[14px]"
+                href="?tab=SupplierMaterialMapping"
+                active={tab === "SupplierMaterialMapping"}
+              >
+                Raw Material Mapping
+              </SidebarItem>
             </SidebarCollapse>
           </SidebarCollapse>
         </SidebarItemGroup>
 
         <SidebarItemGroup>
-          <p className="p-3 px-2 font-semibold text-slate-400">Manufacturing</p>
+          <p className="p-3 px-2 font-semibold text-sm text-slate-400">
+            Manufacturing
+          </p>
           <SidebarCollapse
+            className="text-[15px]"
             icon={HiClipboardDocumentCheck}
             label="order Management"
           >
-            <SidebarItem href="?tab=CoRegister" active={tab === "CoRegister"}>
+            <SidebarItem
+              className="text-[15px]"
+              href="?tab=CoRegister"
+              active={tab === "CoRegister"}
+            >
               Customer Order
             </SidebarItem>
-            <SidebarItem href="?tab=CoApproval" active={tab === "CoApproval"}>
+            <SidebarItem
+              className="text-[15px]"
+              href="?tab=CoApproval"
+              active={tab === "CoApproval"}
+            >
               Customer Order Approval
             </SidebarItem>
-            <SidebarItem href="?tab=SORegister" active={tab === "SORegister"}>
+            <SidebarItem
+              className="text-[15px]"
+              href="?tab=SORegister"
+              active={tab === "SORegister"}
+            >
               Supplier Order
             </SidebarItem>
-            <SidebarItem href="?tab=PendingSO" active={tab === "PendingSO"}>
+            <SidebarItem
+              className="text-[15px]"
+              href="?tab=PendingSO"
+              active={tab === "PendingSO"}
+            >
               Supplier Order Approval
             </SidebarItem>
-            <SidebarItem href="?tab=SOReceiveNoteList" active={tab === "SOReceiveNoteList"}>
-              Supplier Order Receive 
+            <SidebarItem
+              className="text-[15px]"
+              href="?tab=SOReceiveNoteList"
+              active={tab === "SOReceiveNoteList"}
+            >
+              Supplier Order Receive
             </SidebarItem>
-            
           </SidebarCollapse>
         </SidebarItemGroup>
       </SidebarItems>
