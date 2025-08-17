@@ -24,6 +24,40 @@ import { useLocation } from "react-router-dom";
 export default function SidebarMenu() {
   const location = useLocation();
   const [tab, setTab] = useState("");
+  const [openCollapses, setOpenCollapses] = useState([]); // store open collapse labels
+  const [userToggledCollapses, setUserToggledCollapses] = useState([]);
+
+  //! Function to toggle collapse state
+  const toggleCollapse = (label) => {
+    let newOpen = [...openCollapses];
+
+    if (newOpen.includes(label)) {
+      // collapse is open, remove it
+      newOpen = newOpen.filter((l) => l !== label);
+    } else {
+      // add new collapse
+      newOpen.push(label);
+
+      // keep only last 2 open
+      if (newOpen.length > 2) {
+        newOpen.shift(); // remove oldest
+      }
+    }
+
+    setOpenCollapses(newOpen);
+  };
+
+  const isOrderManagementOpen =
+    openCollapses.includes("order Management") || // user toggled it
+    [
+      "CoRegister",
+      "CoApproval",
+      "SORegister",
+      "PendingSO",
+      "SOReceiveNoteList",
+    ].includes(tab); // active tab
+
+  // Effect to sync tab state with URL
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const tabFromUrl = urlParams.get("tab");
@@ -47,6 +81,8 @@ export default function SidebarMenu() {
               className="text-[14px]"
               icon={HiCube}
               label="Product Management"
+              onClick={() => toggleCollapse("Product Management")}
+              open={openCollapses.includes("Product Management")}
             >
               <SidebarItem
                 className="text-[14px]"
@@ -55,15 +91,14 @@ export default function SidebarMenu() {
               >
                 Register Product
               </SidebarItem>
-              <SidebarItem href="#" className="text-[14px]">
-                Product Approval
-              </SidebarItem>
             </SidebarCollapse>
 
             <SidebarCollapse
               className="text-[14px]"
               icon={HiArrowDownOnSquare}
               label="Category Management"
+              onClick={() => toggleCollapse("Category Management")}
+              open={openCollapses.includes("Category Management")}
             >
               <SidebarItem
                 className="text-[14px]"
@@ -81,7 +116,12 @@ export default function SidebarMenu() {
               </SidebarItem>
             </SidebarCollapse>
 
-            <SidebarCollapse icon={HiUserGroup} label="Customer Management">
+            <SidebarCollapse
+              icon={HiUserGroup}
+              label="Customer Management"
+              onClick={() => toggleCollapse("Customer Management")}
+              open={openCollapses.includes("Customer Management")}
+            >
               <SidebarItem
                 className="text-[14px]"
                 href="?tab=CustomerRegister"
@@ -98,6 +138,8 @@ export default function SidebarMenu() {
               className="text-[14px]"
               icon={HiTruck}
               label="Supplier Management"
+              onClick={() => toggleCollapse("Supplier Management")}
+              open={openCollapses.includes("Supplier Management")}
             >
               <SidebarItem
                 className="text-[14px]"
@@ -122,6 +164,8 @@ export default function SidebarMenu() {
               className="text-[14px]"
               icon={HiCubeTransparent}
               label="Raw-Material Management"
+              onClick={() => toggleCollapse("Raw-Material Management")}
+              open={openCollapses.includes("Raw-Material Management")}
             >
               <SidebarItem
                 className="text-[14px]"
@@ -132,7 +176,7 @@ export default function SidebarMenu() {
               </SidebarItem>
               {/* <SidebarItem href="#">Raw-Material Approve</SidebarItem> */}
               <SidebarItem
-              className="text-[14px]"
+                className="text-[14px]"
                 href="?tab=SupplierMaterialMapping"
                 active={tab === "SupplierMaterialMapping"}
               >
@@ -150,6 +194,8 @@ export default function SidebarMenu() {
             className="text-[15px]"
             icon={HiClipboardDocumentCheck}
             label="order Management"
+            onClick={() => toggleCollapse("order Management")}
+            open={isOrderManagementOpen}
           >
             <SidebarItem
               className="text-[15px]"
@@ -187,6 +233,19 @@ export default function SidebarMenu() {
               Supplier Order Receive
             </SidebarItem>
           </SidebarCollapse>
+        </SidebarItemGroup>
+        <SidebarItemGroup>
+          <p className="p-3 px-2 font-semibold text-sm text-slate-400">
+            Stock Management
+          </p>
+          <SidebarItem
+            className="text-[15px]"
+            icon={HiCubeTransparent}
+            href="?tab=MaterialStoreTable"
+            active={tab === "MaterialStoreTable"}
+          >
+            Material Store
+          </SidebarItem>
         </SidebarItemGroup>
       </SidebarItems>
     </Sidebar>

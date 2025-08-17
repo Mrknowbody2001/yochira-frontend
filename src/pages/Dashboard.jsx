@@ -27,6 +27,8 @@ import GetOnePendingSo from "../screens/supplierOrder/GetOnePendingSo";
 import SOReceiveNoteList from "../screens/SORManagement/SOReceiveNoteList";
 import ApprovedSOList from "../screens/SORManagement/ApprovedSOList";
 import GetOneApprovedSo from "../screens/SORManagement/GetOneApprovedSo";
+import Header from "../components/Header";
+import MaterialStoreTable from "../screens/Stock/materialStock";
 const Dashboard = () => {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -42,54 +44,64 @@ const Dashboard = () => {
       <div className="md:w-65 ">
         <SidebarMenu />
       </div>
+      {/* main content */}
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <Header />
 
-      <div className="flex-1 p-4 overflow-auto bg-[#172e75] min-h-screen">
-        {/* dashboard  */}
-        {tab === "productRegister" && <ProductRegister />}
+        <div className="flex-1 px-4  overflow-auto bg-[#172e75] min-h-screen">
+          {/* dashboard  */}
+          {tab === "productRegister" && <ProductRegister />}
 
-        {tab === "CategoryRegister" && <CategoryRegister />}
-        {tab === "SubCategoryRegister" && <SubCategoryRegister />}
-        {tab === "CustomerRegister" && <CustomerRegister />}
-        {tab === "CoRegister" && <CoRegister />}
-        {tab === "RawMaterialRegister" && <RawMaterialRegister />}
-        {tab === "RawMaterialForm" && <RawMaterialForm />}
-        {tab === "SupplierForm" && <SupplierForm />}
-        {tab === "SupplierRegister" && <SupplierRegister />}
-        {tab === "SupplierApproval" && <SupplierApproval />}
-        {tab === "GetOneSupplier" && <GetOneSupplier />}
-        {tab === "OneSupplierApproval" && <OneSupplierApproval />}
-        {tab === "SORegister" && <SORegister />}
-        {tab === "SupplierMaterialMapping" && <SupplierMaterialMapping />}
-        {tab === "GetOneSupplierOrder" && <GetOneSupplierOrder />}
-        {tab === "PendingSO" && <PendingSO />}
-        {tab === "SupplierOrderForm" && <SupplierOrderForm />}
-        {tab === "GetOnePendingSo" && <GetOnePendingSo />}
+          {tab === "CategoryRegister" && <CategoryRegister />}
+          {tab === "SubCategoryRegister" && <SubCategoryRegister />}
+          {tab === "CustomerRegister" && <CustomerRegister />}
+          {/* {tab === "CoRegister" && <CoRegister />} */}
+          {tab === "RawMaterialRegister" && <RawMaterialRegister />}
+          {tab === "RawMaterialForm" && <RawMaterialForm />}
+          {tab === "SupplierForm" && <SupplierForm />}
+          {tab === "SupplierRegister" && <SupplierRegister />}
+          {tab === "SupplierApproval" && <SupplierApproval />}
+          {tab === "GetOneSupplier" && <GetOneSupplier />}
+          {tab === "OneSupplierApproval" && <OneSupplierApproval />}
+          {tab === "SORegister" && <SORegister />}
+          {tab === "SupplierMaterialMapping" && <SupplierMaterialMapping />}
+          {tab === "GetOneSupplierOrder" && <GetOneSupplierOrder />}
+          {tab === "PendingSO" && <PendingSO />}
+          {tab === "SupplierOrderForm" && <SupplierOrderForm />}
+          {tab === "GetOnePendingSo" && <GetOnePendingSo />}
 
-        {tab === "ApprovedSOList" && <ApprovedSOList />}
-        {tab === "GetOneApprovedSo" && <GetOneApprovedSo />}
-        {tab === "SOReceiveNoteList" && <SOReceiveNoteList />}
+          {tab === "ApprovedSOList" && <ApprovedSOList />}
+          {tab === "GetOneApprovedSo" && <GetOneApprovedSo />}
+          {tab === "SOReceiveNoteList" && <SOReceiveNoteList />}
 
-        {/* customer order section  */}
-        {tab === "CoRegister" && (
-          <CoRegister
-            id={new URLSearchParams(window.location.search).get("id")}
-            onCancel={() => {
-              window.location.href = "/dashboard?tab=CoRegister";
-            }}
-          />
-        )}
+          {/* customer order section  */}
+          {tab === "CoRegister" && (
+            <CoRegister
+              id={new URLSearchParams(window.location.search).get("id")}
+              onCancel={() => {
+                window.location.href = "/dashboard?tab=CoRegister";
+              }}
+            />
+          )}
 
-        {tab === "GetOneCO" && (
-          <GetOneCO
-            id={new URLSearchParams(window.location.search).get("id")}
-            onCancel={() => {
-              window.location.href = "/dashboard?tab=GetOneCO";
-            }}
-          />
-        )}
-        {tab === "CoApproval" && <CoApproval />}
-        {tab === "PendingCO" && <PendingCO />}
-        {tab === "ApproveCustomerOrder" && <ApproveCustomerOrder />}
+          {tab === "GetOneCO" && (
+            <GetOneCO
+              id={new URLSearchParams(window.location.search).get("id")}
+              onCancel={() => {
+                window.location.href = "/dashboard?tab=GetOneCO";
+              }}
+            />
+          )}
+          {tab === "CoApproval" && <CoApproval />}
+          {tab === "PendingCO" && <PendingCO />}
+          {tab === "ApproveCustomerOrder" && <ApproveCustomerOrder />}
+
+          {/* stock management */}
+          {tab === "MaterialStoreTable" && <MaterialStoreTable />}
+
+          
+        </div>
       </div>
     </div>
   );

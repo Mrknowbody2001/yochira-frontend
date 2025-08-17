@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Table, TableHead, TableHeadCell, TableBody, TableRow, TableCell } from "flowbite-react";
+import {
+  Table,
+  TableHead,
+  TableHeadCell,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "flowbite-react";
 
 const SOReceiveNoteList = () => {
   const navigate = useNavigate();
