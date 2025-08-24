@@ -52,6 +52,7 @@ const StockIn = () => {
       ...prev,
       material: `${material.materialId} - ${material.materialName}`,
       uom: material.unit,
+      unitPrice: material.defaultUnitPrice,
     }));
     setSearchResults([]); //hide search results after selection
     setIsSearching(false);
@@ -61,7 +62,49 @@ const StockIn = () => {
     return () => debouncedFetch.cancel();
   }, [debouncedFetch]);
 
-  const handleAddMaterial = () => {};
+  const handleAddMaterial = async () => {
+    if (!formData.material || !formData.qty || !formData.unitPrice) {
+      return alert("Please select material and enter quantity & unit price");
+    }
+
+    const [materialId, ...rest] = formData.material.split(" - ");
+    const materialName = rest.join(" - ");
+
+    const payload = {
+      referenceNo: `REF-${Date.now()}`,
+      items: [
+        {
+          materialId: materialId.trim(),
+          materialName: materialName.trim(),
+          receiveQty: Number(formData.qty),
+          uom: formData.uom,
+          unitPrice: Number(formData.unitPrice),
+        },
+      ],
+    };
+
+    try {
+      const response = await fetch(
+        "http://localhost:5008/api/rawMaterial/update-store",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        alert(data.message);
+        setFormData({ material: "", uom: "", qty: "", unitPrice: "" });
+      } else {
+        alert(data.message || "Failed to update material store");
+      }
+    } catch (error) {
+      console.error("Error updating material store:", error);
+      alert("Error updating material store");
+    }
+  };
 
   return (
     <div className="p-6 bg-gray-900 text-white rounded-lg">
@@ -70,7 +113,7 @@ const StockIn = () => {
       <Card className="bg-gray-800 mb-6 relative">
         <div className="flex gap-2">
           {/* Material Field with Dropdown */}
-          <div className="w-1/3 relative">
+          <div className="w-1/4 relative">
             <Label htmlFor="material">Material</Label>
             <TextInput
               id="material"
@@ -130,6 +173,19 @@ const StockIn = () => {
               value={formData.qty}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, qty: e.target.value }))
+              }
+            />
+          </div>
+          {/* Unit Price */}
+          <div className="w-1/4">
+            <Label htmlFor="unitPrice">Unit Price</Label>
+            <TextInput
+              id="unitPrice"
+              name="unitPrice"
+              type="number"
+              value={formData.unitPrice}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, unitPrice: e.target.value }))
               }
             />
           </div>
