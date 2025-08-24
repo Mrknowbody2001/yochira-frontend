@@ -29,6 +29,9 @@ import ApprovedSOList from "../screens/SORManagement/ApprovedSOList";
 import GetOneApprovedSo from "../screens/SORManagement/GetOneApprovedSo";
 import Header from "../components/Header";
 import MaterialStoreTable from "../screens/Stock/materialStock";
+import TransactionLog from "../screens/Stock/TransactionLog";
+import StockIn from "../screens/Stock/StockIn";
+import StockOut from "../screens/Stock/StockOut";
 const Dashboard = () => {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -99,8 +102,9 @@ const Dashboard = () => {
 
           {/* stock management */}
           {tab === "MaterialStoreTable" && <MaterialStoreTable />}
-
-          
+          {tab === "TransactionLog" && <TransactionLog />}
+          {tab === "StockIn" && <StockIn />}
+          {tab === "StockOut" && <StockOut />}
         </div>
       </div>
     </div>

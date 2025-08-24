@@ -238,14 +238,40 @@ export default function SidebarMenu() {
           <p className="p-3 px-2 font-semibold text-sm text-slate-400">
             Stock Management
           </p>
-          <SidebarItem
+          <SidebarCollapse
             className="text-[15px]"
             icon={HiCubeTransparent}
-            href="?tab=MaterialStoreTable"
-            active={tab === "MaterialStoreTable"}
+            label=" Stocks Management"
           >
-            Material Store
-          </SidebarItem>
+            <SidebarItem
+              className="text-[15px]"
+              href="?tab=MaterialStoreTable"
+              active={tab === "MaterialStoreTable"}
+            >
+              Material Stock
+            </SidebarItem>
+            <SidebarItem
+              className="text-[15px]"
+              href="?tab=TransactionLog"
+              active={tab === "TransactionLog"}
+            >
+              Stock Transaction Log
+            </SidebarItem>
+            <SidebarItem
+              className="text-[15px]"
+              href="?tab=StockIn"
+              active={tab === "StockIn"}
+            >
+              Stock In
+            </SidebarItem>
+            <SidebarItem
+              className="text-[15px]"
+              href="?tab=StockOut"
+              active={tab === "StockOut"}
+            >
+              Stock Out
+            </SidebarItem>
+          </SidebarCollapse>
         </SidebarItemGroup>
       </SidebarItems>
     </Sidebar>
