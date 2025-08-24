@@ -31,7 +31,7 @@ export default function MaterialStoreTable() {
       <h3 className="text-lg font-semibold text-white mb-4">
         Material Store Transaction Log
       </h3>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto overflow-y-auto max-h-96">
         <table className="w-full text-sm text-white border border-gray-700">
           <thead className="bg-gray-700">
             <tr>
@@ -39,10 +39,12 @@ export default function MaterialStoreTable() {
               <th className="px-2 py-1">Material Name</th>
               <th className="px-2 py-1">qty</th>
               <th className="px-2 py-1">Unit Price</th>
-              <th className="px-2 py-1">SORN No</th>
+              <th className="px-2 py-1">Reference No</th>
               <th className="px-2 py-1">UOM</th>
               <th className="px-2 py-1">Date</th>
               <th className="px-2 py-1">user</th>
+              <th className="px-2 py-1">Type</th>
+              <th className="px-2 py-1">remark</th>
             </tr>
           </thead>
           <tbody>
@@ -60,6 +62,8 @@ export default function MaterialStoreTable() {
                   {new Date(item.date).toLocaleString()}
                 </td>
                 <td className="px-2 py-1 text-center">Chamith sandeepa</td>
+                <td className="px-2 py-1 text-center">{item.type}</td>
+                <td className="px-2 py-1 text-center">{item.remark} </td>
               </tr>
             ))}
           </tbody>
