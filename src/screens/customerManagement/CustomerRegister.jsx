@@ -67,7 +67,7 @@ const CustomerRegister = () => {
         />
       ) : (
         <div className="w-full overflow-auto bg-[#243b55] border border-2 rounded p-4">
-          <div className="min-w-[1200px] max-h-[500px] overflow-auto">
+          <div className="min-w-[1200px] max-h-[500px] overflow-x-auto overflow-y-auto">
             <Table striped>
               <TableHead>
                 <TableRow>
