@@ -152,7 +152,7 @@ const StockIn = () => {
               )}
           </div>
           {/* UOM */}
-          <div className="w-1/3">
+          <div className="w-1/4">
             <Label htmlFor="uom">UOM</Label>
             <TextInput
               id="uom"
@@ -164,7 +164,7 @@ const StockIn = () => {
           </div>
 
           {/* QTY */}
-          <div className="w-1/3">
+          <div className="w-1/4">
             <Label htmlFor="qty">QTY</Label>
             <TextInput
               id="qty"
