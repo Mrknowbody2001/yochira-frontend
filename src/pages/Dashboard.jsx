@@ -32,6 +32,7 @@ import MaterialStoreTable from "../screens/Stock/materialStock";
 import TransactionLog from "../screens/Stock/TransactionLog";
 import StockIn from "../screens/Stock/StockIn";
 import StockOut from "../screens/Stock/StockOut";
+import ProductionStartNote from "../screens/Production/ProductionStartNote";
 const Dashboard = () => {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -105,6 +106,9 @@ const Dashboard = () => {
           {tab === "TransactionLog" && <TransactionLog />}
           {tab === "StockIn" && <StockIn />}
           {tab === "StockOut" && <StockOut />}
+
+          {/* production  */}
+          {tab === "ProductionStartNote" && <ProductionStartNote />}
         </div>
       </div>
     </div>

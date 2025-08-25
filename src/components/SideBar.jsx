@@ -17,6 +17,8 @@ import {
   HiCubeTransparent,
   HiArrowDownOnSquare,
   HiClipboardDocumentCheck,
+  HiPlay,
+  HiCog,
 } from "react-icons/hi2";
 import { HiClipboardCheck } from "react-icons/hi";
 import { useLocation } from "react-router-dom";
@@ -272,6 +274,44 @@ export default function SidebarMenu() {
               Stock Out
             </SidebarItem>
           </SidebarCollapse>
+        </SidebarItemGroup>
+        {/* production */}
+        <SidebarItemGroup>
+          <p className="p-3 px-2 font-semibold text-sm text-slate-400">
+            Production
+          </p>
+          <SidebarCollapse
+            className="text-[15px]"
+            icon={HiCog}
+            label="Production Management"
+          >
+            <SidebarItem
+              className="text-[15px]"
+              href="?tab=ProductionStartNote"
+              active={tab === "ProductionStartNote"}
+            >
+              Production Start
+            </SidebarItem>
+            <SidebarItem
+              className="text-[15px]"
+              href="?tab=ProductionApproval"
+              active={tab === "ProductionApproval"}
+            >
+              Production Approval
+            </SidebarItem>
+            <SidebarItem
+              className="text-[15px]"
+              href="?tab=ProductionFinished"
+              active={tab === "ProductionFinished"}
+            >
+              Production Finished
+            </SidebarItem>
+          </SidebarCollapse>
+          <SidebarCollapse
+            className="text-[15px]"
+            icon={HiClipboardCheck}
+            label="Quality Check"
+          ></SidebarCollapse>
         </SidebarItemGroup>
       </SidebarItems>
     </Sidebar>
