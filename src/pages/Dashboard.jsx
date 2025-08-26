@@ -33,6 +33,8 @@ import TransactionLog from "../screens/Stock/TransactionLog";
 import StockIn from "../screens/Stock/StockIn";
 import StockOut from "../screens/Stock/StockOut";
 import ProductionStartNote from "../screens/Production/ProductionStartNote";
+import ApprovedCoList from "../screens/Production/ApprovedCoList";
+import PSNRegister from "../screens/Production/PSNRegister";
 const Dashboard = () => {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -109,6 +111,8 @@ const Dashboard = () => {
 
           {/* production  */}
           {tab === "ProductionStartNote" && <ProductionStartNote />}
+          {tab === "ApprovedCoList" && <ApprovedCoList />}
+          {tab === "PSNRegister" && <PSNRegister />}
         </div>
       </div>
     </div>

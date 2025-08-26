@@ -287,8 +287,8 @@ export default function SidebarMenu() {
           >
             <SidebarItem
               className="text-[15px]"
-              href="?tab=ProductionStartNote"
-              active={tab === "ProductionStartNote"}
+              href="?tab=ApprovedCoList"
+              active={tab === "ApprovedCoList"}
             >
               Production Start
             </SidebarItem>

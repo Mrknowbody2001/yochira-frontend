@@ -1,99 +1,108 @@
-import React, { useEffect, useState } from "react";
-import {
-  Label,
-  TextInput,
-  Select,
-  Textarea,
-  Button,
-  Card,
-} from "flowbite-react";
+import React, { useEffect, useState, useCallback } from "react";
+import { Label, TextInput, Textarea, Button, Card } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
+import debounce from "lodash.debounce";
 
 const ProductionStartNote = () => {
-  const [items, setItems] = useState([]); // Items from Customer Order
-  const [extraMaterials, setExtraMaterials] = useState([]); // Added extra materials
-  const [customers, setCustomers] = useState([]); // Customer list
+  const [items, setItems] = useState([]); // CO items
+  const [extraMaterials, setExtraMaterials] = useState([]); // Extra materials
   const [formData, setFormData] = useState({
     CONo: "",
     customerId: "",
     customerName: "",
-    orderDate: new Date().toISOString().split("T")[0],
+    orderDate: "",
     remark: "",
     PSNNo: "",
+    material: "",
     materialId: "",
     materialName: "",
     qty: "",
     unitPrice: "",
     otherCost: "",
   });
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const coId = new URLSearchParams(window.location.search).get("id");
 
-  // Fetch customers and CO No
+  // Fetch CO details
   useEffect(() => {
-    fetch("http://localhost:5007/api/customers")
-      .then((res) => res.json())
-      .then((data) => setCustomers(data.customers || []))
-      .catch(() => setCustomers([]));
+    if (coId) {
+      fetch(`http://localhost:5009/api/co/${coId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setFormData((prev) => ({
+            ...prev,
+            CONo: data.coNo || "",
+            customerId: data.customerId || "",
+            customerName: data.customerName || "",
+            orderDate: data.orderDate
+              ? new Date(data.orderDate).toISOString().split("T")[0]
+              : "",
+            remark: data.remark || "",
+            orderTotalValue: data.orderTotalValue || 0,
+          }));
+          setItems(data.items || []);
+        })
+        .catch((err) => console.error("Error fetching CO:", err));
+    }
+  }, [coId]);
 
-    // Fetch CO No
-    fetch("http://localhost:5007/api/customer-orders/new-co-number")
+  // Fetch PSN number
+  useEffect(() => {
+    fetch("http://localhost:5009/api/psn/psn-no")
       .then((res) => res.json())
       .then((data) =>
-        setFormData((prev) => ({ ...prev, CONo: data.CONo || "ERROR" }))
+        setFormData((prev) => ({ ...prev, PSNNo: data.PSNNo || "" }))
       )
       .catch(() => {});
   }, []);
 
-  // Fetch PSN No
-  useEffect(() => {
-    fetch("http://localhost:5007/api/production/psn-number")
-      .then((res) => res.json())
-      .then((data) =>
-        setFormData((prev) => ({ ...prev, PSNNo: data.PSNNo || "ERROR" }))
-      )
-      .catch(() => {});
-  }, []);
-
-  // Handle extra material select (you can replace with real API call)
-  const handleMaterialSelect = (id) => {
-    const mat = {
-      materialId: id,
-      materialName: `Material ${id}`,
-      unitPrice: 100,
-    }; // Demo data
-    setFormData((prev) => ({
-      ...prev,
-      materialId: mat.materialId,
-      materialName: mat.materialName,
-      unitPrice: mat.unitPrice,
-      qty: "",
-    }));
+  // Fetch materials
+  const fetchMaterials = async (query) => {
+    if (!query) return setSearchResults([]);
+    try {
+      setLoading(true);
+      const res = await fetch(
+        `http://localhost:5009/api/Material/search?query=${query}`
+      );
+      const data = await res.json();
+      setSearchResults(data);
+    } catch (err) {
+      console.error("Error fetching materials:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Calculate totals
+  const debouncedFetch = useCallback(debounce(fetchMaterials, 300), []);
+  useEffect(() => () => debouncedFetch.cancel(), [debouncedFetch]);
+
+  // Extra material totals
   const extraMaterialTotal = extraMaterials.reduce(
-    (sum, i) => sum + i.value,
+    (sum, m) => sum + m.totalValue,
     0
   );
-  const itemsTotal = items.reduce((sum, i) => sum + i.total, 0);
   const otherCost = Number(formData.otherCost) || 0;
-  const finalValue = itemsTotal + extraMaterialTotal + otherCost;
+  const finalValue = extraMaterialTotal + otherCost;
 
   // Add extra material
   const handleAddMaterial = () => {
     if (!formData.materialId || !formData.qty) return;
-    const value = Number(formData.qty) * Number(formData.unitPrice);
-    const newItem = {
+    const totalValue = Number(formData.qty) * Number(formData.unitPrice);
+    const newMaterial = {
       materialId: formData.materialId,
       materialName: formData.materialName,
       qty: Number(formData.qty),
       unitPrice: Number(formData.unitPrice),
-      value,
+      totalValue,
     };
-    setExtraMaterials((prev) => [...prev, newItem]);
+    setExtraMaterials((prev) => [...prev, newMaterial]);
     setFormData((prev) => ({
       ...prev,
+      material: "",
       materialId: "",
       materialName: "",
       qty: "",
@@ -101,35 +110,59 @@ const ProductionStartNote = () => {
     }));
   };
 
+  // Submit PSN
   const handleSubmit = async () => {
     if (!formData.customerId) {
-      alert("Please select a customer");
+      alert("Customer is required");
       return;
     }
+
+    const formattedItems = items.map((i) => ({
+      productId: i.productId || i.id,
+      productName: i.productName || i.name,
+      qty: Number(i.orderQty || i.qty || 0),
+      unitPrice: Number(i.sellingPrice || 0),
+      totalValue: Number(
+        i.itemTotalValue || (i.qty || i.orderQty) * i.sellingPrice || 0
+      ),
+    }));
+
+    const formattedExtraMaterials = extraMaterials.map((m) => ({
+      materialId: m.materialId,
+      materialName: m.materialName,
+      qty: Number(m.qty || 0),
+      unitPrice: Number(m.unitPrice || 0),
+      totalValue: Number(m.value || m.qty * m.unitPrice || 0),
+    }));
 
     const payload = {
       CONo: formData.CONo,
       customerId: formData.customerId,
+      customerName: formData.customerName,
       orderDate: formData.orderDate,
       remark: formData.remark,
       PSNNo: formData.PSNNo,
-      items,
-      extraMaterials,
-      otherCost,
-      finalValue,
+      items: formattedItems,
+      extraMaterials: formattedExtraMaterials,
+      otherCost: Number(formData.otherCost || 0),
+      extraMaterialTotal: formattedExtraMaterials.reduce(
+        (sum, m) => sum + m.totalValue,
+        0
+      ),
+      finalValue:
+        formattedItems.reduce((sum, i) => sum + i.totalValue, 0) +
+        formattedExtraMaterials.reduce((sum, m) => sum + m.totalValue, 0) +
+        Number(formData.otherCost || 0),
     };
 
     try {
-      const res = await fetch(
-        "http://localhost:5007/api/production/create-psn",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        }
-      );
+      const res = await fetch("http://localhost:5009/api/psn/create-psn", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Unknown error");
+      if (!res.ok) throw new Error(data.message || "Error creating PSN");
       alert("Production Start Note created successfully");
       navigate("/dashboard?tab=PSNRegister");
     } catch (err) {
@@ -137,68 +170,52 @@ const ProductionStartNote = () => {
     }
   };
 
+  //remove material form extra materials
+  const handleRemoveMaterial = (index) => {
+    setExtraMaterials((prev) => prev.filter((_, i) => i !== index));
+  };
+
   return (
     <div className="p-6 bg-gray-900 text-white rounded-lg">
       <h2 className="text-xl font-semibold mb-4">Production Start Note</h2>
 
-      {/* Card 1 - Customer & Order Details */}
+      {/* Customer & CO Details */}
       <Card className="bg-gray-800 mb-6">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-4 gap-3">
           <div>
             <Label>CO No</Label>
             <TextInput readOnly value={formData.CONo} />
           </div>
           <div>
             <Label>Customer</Label>
-            <Select
-              value={formData.customerId}
-              onChange={(e) =>
-                setFormData((p) => ({
-                  ...p,
-                  customerId: e.target.value,
-                  customerName:
-                    customers.find((c) => c.id === e.target.value)?.name || "",
-                }))
-              }
-            >
-              <option value="">Select Customer</option>
-              {customers.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.id} - {c.name}
-                </option>
-              ))}
-            </Select>
+            <TextInput
+              readOnly
+              value={`${formData.customerId} - ${formData.customerName}`}
+            />
           </div>
           <div>
             <Label>Order Date</Label>
-            <TextInput
-              type="date"
-              value={formData.orderDate}
-              onChange={(e) =>
-                setFormData((p) => ({ ...p, orderDate: e.target.value }))
-              }
-            />
+            <TextInput readOnly type="date" value={formData.orderDate} />
+          </div>
+          <div>
+            <Label>Order Total Value</Label>
+            <TextInput readOnly value={formData.orderTotalValue} />
           </div>
           <div className="col-span-3">
             <Label>Remark</Label>
-            <Textarea
-              value={formData.remark}
-              onChange={(e) =>
-                setFormData((p) => ({ ...p, remark: e.target.value }))
-              }
-            />
+            <Textarea readOnly value={formData.remark} className="w-full" />
           </div>
         </div>
       </Card>
 
-      {/* Card 2 - Existing Items */}
+      {/* CO Items */}
       <Card className="bg-gray-800 mb-6">
         <h3 className="text-lg mb-2">Customer Order Items</h3>
         {items.length > 0 ? (
           <table className="w-full text-sm text-white border border-gray-700">
             <thead className="bg-gray-700">
               <tr>
-                <th className="px-4 py-2">Material</th>
+                <th className="px-4 py-2">Product</th>
                 <th className="px-4 py-2">Qty</th>
                 <th className="px-4 py-2">Unit Price</th>
                 <th className="px-4 py-2">Total</th>
@@ -207,10 +224,14 @@ const ProductionStartNote = () => {
             <tbody>
               {items.map((i, idx) => (
                 <tr key={idx} className="bg-gray-600">
-                  <td className="px-4 py-2">{i.materialName}</td>
-                  <td className="px-4 py-2">{i.qty}</td>
-                  <td className="px-4 py-2">{i.unitPrice.toFixed(2)}</td>
-                  <td className="px-4 py-2">{i.total.toFixed(2)}</td>
+                  <td className="px-4 py-2">{i.productName}</td>
+                  <td className="px-4 py-2 text-center">{i.orderQty}</td>
+                  <td className="px-4 py-2 text-center">
+                    {(i.sellingPrice || 0).toFixed(2)}
+                  </td>
+                  <td className="px-4 py-2 text-center">
+                    {(i.itemTotalValue || 0).toFixed(2)}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -219,7 +240,9 @@ const ProductionStartNote = () => {
                 <td colSpan="3" className="text-right px-4 py-2">
                   Items Total
                 </td>
-                <td className="px-4 py-2">{itemsTotal.toFixed(2)}</td>
+                <td className="px-4 py-2">
+                  {(formData.orderTotalValue || 0).toFixed(2)}
+                </td>
               </tr>
             </tfoot>
           </table>
@@ -228,25 +251,53 @@ const ProductionStartNote = () => {
         )}
       </Card>
 
-      {/* Card 3 - PSN Extra Materials & Cost */}
+      {/* Extra Materials */}
       <Card className="bg-gray-800 mb-6">
         <h3 className="text-lg mb-4">Production Details</h3>
+
         <div className="mb-4">
           <Label>PSN No</Label>
           <TextInput readOnly value={formData.PSNNo} />
         </div>
+
         <div className="grid grid-cols-5 gap-4 items-end mb-4">
           <div>
             <Label>Material</Label>
-            <Select
-              value={formData.materialId}
-              onChange={(e) => handleMaterialSelect(e.target.value)}
-            >
-              <option value="">Select Material</option>
-              <option value="M001">Material 1</option>
-              <option value="M002">Material 2</option>
-            </Select>
+            <TextInput
+              value={formData.material}
+              onChange={(e) => {
+                const value = e.target.value;
+                setFormData((prev) => ({ ...prev, material: value }));
+                setIsSearching(true);
+                debouncedFetch(value);
+              }}
+              placeholder="Search material..."
+            />
+            {isSearching && searchResults.length > 0 && (
+              <div className="bg-gray-700 text-white border border-gray-600 mt-1 max-h-40 overflow-auto">
+                {searchResults.map((mat) => (
+                  <div
+                    key={mat.materialId}
+                    className="px-2 py-1 hover:bg-gray-600 cursor-pointer"
+                    onClick={() => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        material: `${mat.materialId} - ${mat.materialName}`,
+                        materialId: mat.materialId,
+                        materialName: mat.materialName,
+                        unitPrice: mat.defaultUnitPrice,
+                      }));
+                      setSearchResults([]);
+                      setIsSearching(false);
+                    }}
+                  >
+                    {mat.materialId} - {mat.materialName}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
+
           <div>
             <Label>Qty</Label>
             <TextInput
@@ -257,21 +308,27 @@ const ProductionStartNote = () => {
               }
             />
           </div>
+
           <div>
             <Label>Unit Price</Label>
             <TextInput readOnly value={formData.unitPrice} />
           </div>
+
           <div>
             <Label>Total</Label>
             <TextInput
               readOnly
               value={
                 formData.qty && formData.unitPrice
-                  ? (formData.qty * formData.unitPrice).toFixed(2)
-                  : 0
+                  ? (
+                      Number(formData.qty || 0) *
+                      Number(formData.unitPrice || 0)
+                    ).toFixed(2)
+                  : "0.00"
               }
             />
           </div>
+
           <Button color="blue" onClick={handleAddMaterial}>
             Add
           </Button>
@@ -286,24 +343,39 @@ const ProductionStartNote = () => {
                 <th className="px-4 py-2">Qty</th>
                 <th className="px-4 py-2">Unit Price</th>
                 <th className="px-4 py-2">Total</th>
+                <th className="px-4 py-2">Action</th> {/* New column */}
               </tr>
             </thead>
             <tbody>
               {extraMaterials.map((m, idx) => (
                 <tr key={idx} className="bg-gray-600">
                   <td className="px-4 py-2">{m.materialName}</td>
-                  <td className="px-4 py-2">{m.qty}</td>
-                  <td className="px-4 py-2">{m.unitPrice.toFixed(2)}</td>
-                  <td className="px-4 py-2">{m.value.toFixed(2)}</td>
+                  <td className="px-4 py-2 text-center">{m.qty}</td>
+                  <td className="px-4 py-2 text-center">
+                    {(Number(m.unitPrice) || 0).toFixed(2)}
+                  </td>
+                  <td className="px-4 py-2 text-center">
+                    {(Number(m.totalValue) || 0).toFixed(2)}
+                  </td>
+                  <td className="px-4 py-2 text-center">
+                    <button
+                      className="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white"
+                      onClick={() => handleRemoveMaterial(idx)}
+                    >
+                      Remove
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
             <tfoot>
               <tr className="bg-gray-700 font-semibold">
-                <td colSpan="3" className="text-right px-4 py-2">
+                <td colSpan="4" className="text-right px-4 py-2">
                   Extra Materials Total
                 </td>
-                <td className="px-4 py-2">{extraMaterialTotal.toFixed(2)}</td>
+                <td className="px-4 py-2">
+                  {(Number(extraMaterialTotal) || 0).toFixed(2)}
+                </td>
               </tr>
             </tfoot>
           </table>
@@ -327,7 +399,6 @@ const ProductionStartNote = () => {
         </div>
       </Card>
 
-      {/* Buttons */}
       <div className="flex gap-4">
         <Button color="green" onClick={handleSubmit}>
           Submit
