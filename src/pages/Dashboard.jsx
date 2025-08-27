@@ -38,6 +38,10 @@ import PSNRegister from "../screens/Production/PSNRegister";
 import GetOnePsn from "../screens/Production/GetOnePsn";
 import StartedPSN from "../screens/Production/StartedPSN";
 import GetOneStartedPSN from "../screens/Production/GetOneStartedPsn";
+import QcRegister from "../screens/QcManagement/QcRegister";
+import GetOneQCN from "../screens/QcManagement/GetOneQCN";
+import QcNList from "../screens/QcManagement/QCNList";
+import QCPassList from "../screens/QcManagement/QCPassList";
 const Dashboard = () => {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -117,8 +121,14 @@ const Dashboard = () => {
           {tab === "ApprovedCoList" && <ApprovedCoList />}
           {tab === "PSNRegister" && <PSNRegister />}
           {tab === "GetOnePsn" && <GetOnePsn />}
-          {tab === "StartedPSN" && <StartedPSN/>}
-          {tab === "GetOneStartedPSN" && <GetOneStartedPSN/>}
+          {tab === "StartedPSN" && <StartedPSN />}
+          {tab === "GetOneStartedPSN" && <GetOneStartedPSN />}
+
+          {/* qc  */}
+          {tab === "QcRegister" && <QcRegister />}
+          {tab === "GetOneQCN" && <GetOneQCN />}
+          {tab === "QcNList" && <QcNList />}
+          {tab === "QCPassList" && <QCPassList />}
         </div>
       </div>
     </div>

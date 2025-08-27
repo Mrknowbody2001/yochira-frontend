@@ -311,7 +311,43 @@ export default function SidebarMenu() {
             className="text-[15px]"
             icon={HiClipboardCheck}
             label="Quality Check"
-          ></SidebarCollapse>
+          >
+            <SidebarItem
+              className="text-[15px]"
+              href="?tab=QcRegister"
+              active={tab === "QcRegister"}
+            >
+              QC Register
+            </SidebarItem>
+            <SidebarItem
+              className="text-[15px]"
+              href="?tab=QcNList"
+              active={tab === "QcNList"}
+            >
+              QCN List
+            </SidebarItem>
+            <SidebarItem
+              className="text-[15px]"
+              href="?tab=QCPassList"
+              active={tab === "QCPassList"}
+            >
+              QC Pass List
+            </SidebarItem>
+            <SidebarItem
+              className="text-[15px]"
+              href="?tab=QCReworkList"
+              active={tab === "QCReworkList"}
+            >
+              QC Rework List
+            </SidebarItem>
+            <SidebarItem
+              className="text-[15px]"
+              href="?tab=QcFailList"
+              active={tab === "QcFailList"}
+            >
+             QC Fail List
+            </SidebarItem>
+          </SidebarCollapse>
         </SidebarItemGroup>
       </SidebarItems>
     </Sidebar>
