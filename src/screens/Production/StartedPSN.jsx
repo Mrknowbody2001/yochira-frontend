@@ -9,14 +9,14 @@ import {
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const PSNRegister = () => {
+const StartedPSN = () => {
   const [psnList, setPsnList] = useState([]);
   const navigate = useNavigate();
 
   // Fetch all PSNs
   const fetchPSNs = async () => {
     try {
-      const res = await fetch("http://localhost:5009/api/psn/all");
+      const res = await fetch("http://localhost:5009/api/psn/started");
       const data = await res.json();
       setPsnList(data || []);
       console.log("Fetched PSNs:", data);
@@ -32,7 +32,7 @@ const PSNRegister = () => {
   return (
     <div className="bg-[#172e75] text-white min-h-screen w-full p-6 rounded overflow-auto">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">PSN Register</h2>
+        <h2 className="text-xl font-semibold">Started PSN List</h2>
         <button
           onClick={() => navigate("/dashboard?tab=ApprovedCoList")}
           className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-white"
@@ -75,7 +75,7 @@ const PSNRegister = () => {
                     <TableCell>{psn.status}</TableCell>
                     <TableCell>
                       <Link
-                        to={`/dashboard?tab=GetOnePsn&id=${psn._id}`}
+                        to={`/dashboard?tab=GetOneStartedPSN&id=${psn._id}`}
                         className="bg-blue-700 hover:bg-blue-800 text-white px-3 py-1 rounded"
                       >
                         View
@@ -98,4 +98,4 @@ const PSNRegister = () => {
   );
 };
 
-export default PSNRegister;
+export default StartedPSN;

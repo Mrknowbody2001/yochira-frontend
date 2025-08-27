@@ -32,16 +32,10 @@ const ApprovedCoList = () => {
     <div className="bg-[#172e75] text-white min-h-screen w-full p-6 rounded overflow-auto">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Approved Customer Orders</h2>
-        <button
-          onClick={() => navigate("/dashboard?tab=ProductionStartNote")}
-          className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-white"
-        >
-          NEW
-        </button>
       </div>
 
-      <div className="w-full bg-[#243b55] border border-2 rounded p-4 overflow-x-auto">
-        <div className="inline-block min-w-[800px] max-h-[400px] overflow-y-auto">
+      <div className="w-full overflow-auto bg-[#243b55] border border-2 rounded p-4">
+        <div className="min-w-[1200px] max-h-[500px] overflow-auto">
           <Table striped>
             <TableHead>
               <TableRow>

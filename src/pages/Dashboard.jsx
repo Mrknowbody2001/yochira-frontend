@@ -35,6 +35,9 @@ import StockOut from "../screens/Stock/StockOut";
 import ProductionStartNote from "../screens/Production/ProductionStartNote";
 import ApprovedCoList from "../screens/Production/ApprovedCoList";
 import PSNRegister from "../screens/Production/PSNRegister";
+import GetOnePsn from "../screens/Production/GetOnePsn";
+import StartedPSN from "../screens/Production/StartedPSN";
+import GetOneStartedPSN from "../screens/Production/GetOneStartedPsn";
 const Dashboard = () => {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -113,6 +116,9 @@ const Dashboard = () => {
           {tab === "ProductionStartNote" && <ProductionStartNote />}
           {tab === "ApprovedCoList" && <ApprovedCoList />}
           {tab === "PSNRegister" && <PSNRegister />}
+          {tab === "GetOnePsn" && <GetOnePsn />}
+          {tab === "StartedPSN" && <StartedPSN/>}
+          {tab === "GetOneStartedPSN" && <GetOneStartedPSN/>}
         </div>
       </div>
     </div>

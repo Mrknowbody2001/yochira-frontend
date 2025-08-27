@@ -287,8 +287,8 @@ export default function SidebarMenu() {
           >
             <SidebarItem
               className="text-[15px]"
-              href="?tab=ApprovedCoList"
-              active={tab === "ApprovedCoList"}
+              href="?tab=PSNRegister"
+              active={tab === "PSNRegister"}
             >
               Production Start
             </SidebarItem>
@@ -301,8 +301,8 @@ export default function SidebarMenu() {
             </SidebarItem>
             <SidebarItem
               className="text-[15px]"
-              href="?tab=ProductionFinished"
-              active={tab === "ProductionFinished"}
+              href="?tab=StartedPSN"
+              active={tab === "StartedPSN"}
             >
               Production Finished
             </SidebarItem>

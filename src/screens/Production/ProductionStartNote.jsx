@@ -393,7 +393,7 @@ const ProductionStartNote = () => {
             />
           </div>
           <div>
-            <Label>Final Value</Label>
+            <Label>Final Cost</Label>
             <TextInput readOnly value={finalValue.toFixed(2)} />
           </div>
         </div>
@@ -403,7 +403,10 @@ const ProductionStartNote = () => {
         <Button color="green" onClick={handleSubmit}>
           Submit
         </Button>
-        <Button color="gray" onClick={() => navigate("/dashboard")}>
+        <Button
+          color="gray"
+          onClick={() => navigate("/dashboard?tab=ApprovedCoList")}
+        >
           Cancel
         </Button>
       </div>
