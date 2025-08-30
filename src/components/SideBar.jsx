@@ -20,7 +20,7 @@ import {
   HiPlay,
   HiCog,
 } from "react-icons/hi2";
-import { HiClipboardCheck } from "react-icons/hi";
+import { HiClipboardCheck, HiViewGrid } from "react-icons/hi";
 import { useLocation } from "react-router-dom";
 
 export default function SidebarMenu() {
@@ -71,6 +71,15 @@ export default function SidebarMenu() {
       className="h-full w-full"
     >
       <SidebarItems>
+        <SidebarItemGroup>
+          <SidebarItem
+            className="text-[14px]"
+            href="?tab=DashboardPage"
+            active={tab === "DashboardPage"}
+          >
+            Dashboard
+          </SidebarItem>
+        </SidebarItemGroup>
         <SidebarItemGroup>
           <p className="text-[15px] font-semibold text-slate-400 mx-2 py-3">
             Master Data
@@ -345,7 +354,33 @@ export default function SidebarMenu() {
               href="?tab=QcFailList"
               active={tab === "QcFailList"}
             >
-             QC Fail List
+              QC Fail List
+            </SidebarItem>
+          </SidebarCollapse>
+          <SidebarItem
+            className="text-[15px]"
+            icon={HiViewGrid}
+            href="?tab=FinishedGoodStockList"
+            active={tab === "FinishedGoodStockList"}
+          >
+            Finished Good Stock
+          </SidebarItem>
+        </SidebarItemGroup>
+        <SidebarItemGroup>
+          <p className="p-3 px-2 font-semibold text-sm text-slate-400">
+            Delivery
+          </p>
+          <SidebarCollapse
+            className="text-[15px]"
+            icon={HiTruck}
+            label="Delivery Management"
+          >
+            <SidebarItem
+              className="text-[15px]"
+              href="?tab=DNList"
+              active={tab === "DNList"}
+            >
+              Delivery PSN List
             </SidebarItem>
           </SidebarCollapse>
         </SidebarItemGroup>

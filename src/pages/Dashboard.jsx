@@ -42,6 +42,13 @@ import QcRegister from "../screens/QcManagement/QcRegister";
 import GetOneQCN from "../screens/QcManagement/GetOneQCN";
 import QcNList from "../screens/QcManagement/QCNList";
 import QCPassList from "../screens/QcManagement/QCPassList";
+import QCReworkList from "../screens/QcManagement/QCReworkList";
+import QcFailList from "../screens/QcManagement/QcFailList";
+import FinishedGoodStockList from "../screens/FinishedGoodStock/FinishedGoodStock";
+import DeliveryPSN from "../screens/Delivery/DeliveryPSN";
+import CreateDN from "../screens/Delivery/CreateDN";
+import DNList from "../screens/Delivery/DNList";
+import DashboardPage from "../screens/DashboardScreen";
 const Dashboard = () => {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -64,6 +71,8 @@ const Dashboard = () => {
 
         <div className="flex-1 px-4  overflow-auto bg-[#172e75] min-h-screen">
           {/* dashboard  */}
+          {tab === "DashboardPage" && <DashboardPage />}
+
           {tab === "productRegister" && <ProductRegister />}
 
           {tab === "CategoryRegister" && <CategoryRegister />}
@@ -129,6 +138,19 @@ const Dashboard = () => {
           {tab === "GetOneQCN" && <GetOneQCN />}
           {tab === "QcNList" && <QcNList />}
           {tab === "QCPassList" && <QCPassList />}
+          {tab === "QCReworkList" && <QCReworkList />}
+          {tab === "QcFailList" && <QcFailList />}
+
+          {/* finished good stock */}
+          {tab === "FinishedGoodStockList" && <FinishedGoodStockList/>}
+
+          {/* Delivery */}
+          {tab === "DeliveryPSN" && <DeliveryPSN />}
+          {tab === "CreateDN" && <CreateDN />}
+          {tab === "DNList" && <DNList />}
+          
+          
+
         </div>
       </div>
     </div>
