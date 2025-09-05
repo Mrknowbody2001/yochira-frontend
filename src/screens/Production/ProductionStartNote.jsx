@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Label, TextInput, Textarea, Button, Card } from "flowbite-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import debounce from "lodash.debounce";
 
 const ProductionStartNote = () => {
@@ -25,7 +25,8 @@ const ProductionStartNote = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const coId = new URLSearchParams(window.location.search).get("id");
+  const [searchParams] = useSearchParams(); // <-- read query params
+  const coId = searchParams.get("id");
 
   // Fetch CO details
   useEffect(() => {
@@ -55,9 +56,12 @@ const ProductionStartNote = () => {
     fetch("http://localhost:5009/api/psn/psn-no")
       .then((res) => res.json())
       .then((data) =>
-        setFormData((prev) => ({ ...prev, PSNNo: data.PSNNo || "" }))
+        setFormData((prev) => ({
+          ...prev,
+          PSNNo: data, // not `data: data`
+        }))
       )
-      .catch(() => {});
+      .catch((err) => console.error("Error fetching PSN No:", err));
   }, []);
 
   // Fetch materials
@@ -255,7 +259,7 @@ const ProductionStartNote = () => {
       <Card className="bg-gray-800 mb-6">
         <h3 className="text-lg mb-4">Production Details</h3>
 
-        <div className="mb-4">
+        <div className="mb-4 w-1/3">
           <Label>PSN No</Label>
           <TextInput readOnly value={formData.PSNNo} />
         </div>
