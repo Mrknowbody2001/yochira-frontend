@@ -11,6 +11,7 @@ const ProductionStartNote = () => {
     customerId: "",
     customerName: "",
     orderDate: "",
+    orderTotalValue: 0,
     remark: "",
     PSNNo: "",
     material: "",
@@ -19,6 +20,8 @@ const ProductionStartNote = () => {
     qty: "",
     unitPrice: "",
     otherCost: "",
+    finalValue: 0, //this is a cost of extra materials + other cost
+    extraMaterialTotal: 0,
   });
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -84,13 +87,20 @@ const ProductionStartNote = () => {
   const debouncedFetch = useCallback(debounce(fetchMaterials, 300), []);
   useEffect(() => () => debouncedFetch.cancel(), [debouncedFetch]);
 
-  // Extra material totals
-  const extraMaterialTotal = extraMaterials.reduce(
-    (sum, m) => sum + m.totalValue,
-    0
-  );
-  const otherCost = Number(formData.otherCost) || 0;
-  const finalValue = extraMaterialTotal + otherCost;
+  useEffect(() => {
+    const extraMaterialTotal = extraMaterials.reduce(
+      (sum, m) => sum + m.totalValue,
+      0
+    );
+    const otherCost = Number(formData.otherCost) || 0;
+    const finalValue = extraMaterialTotal + otherCost;
+
+    setFormData((prev) => ({
+      ...prev,
+      extraMaterialTotal,
+      finalValue,
+    }));
+  }, [extraMaterials, formData.otherCost]);
 
   // Add extra material
   const handleAddMaterial = () => {
@@ -125,7 +135,7 @@ const ProductionStartNote = () => {
       productId: i.productId || i.id,
       productName: i.productName || i.name,
       qty: Number(i.orderQty || i.qty || 0),
-      unitPrice: Number(i.sellingPrice || 0),
+      sellingPrice: Number(i.sellingPrice || 0),
       totalValue: Number(
         i.itemTotalValue || (i.qty || i.orderQty) * i.sellingPrice || 0
       ),
@@ -144,23 +154,18 @@ const ProductionStartNote = () => {
       customerId: formData.customerId,
       customerName: formData.customerName,
       orderDate: formData.orderDate,
+      orderTotalValue: formData.orderTotalValue,
       remark: formData.remark,
       PSNNo: formData.PSNNo,
       items: formattedItems,
       extraMaterials: formattedExtraMaterials,
       otherCost: Number(formData.otherCost || 0),
-      extraMaterialTotal: formattedExtraMaterials.reduce(
-        (sum, m) => sum + m.totalValue,
-        0
-      ),
-      finalValue:
-        formattedItems.reduce((sum, i) => sum + i.totalValue, 0) +
-        formattedExtraMaterials.reduce((sum, m) => sum + m.totalValue, 0) +
-        Number(formData.otherCost || 0),
+      extraMaterialTotal: formData.extraMaterialTotal,
+      finalValue: formData.finalValue,
     };
 
     try {
-      const res = await fetch("http://localhost:5009/api/psn/create-psn", {
+      const res = await fetch("http://localhost:5009/api/psn/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -221,7 +226,7 @@ const ProductionStartNote = () => {
               <tr>
                 <th className="px-4 py-2">Product</th>
                 <th className="px-4 py-2">Qty</th>
-                <th className="px-4 py-2">Unit Price</th>
+                <th className="px-4 py-2">Selling-Price</th>
                 <th className="px-4 py-2">Total</th>
               </tr>
             </thead>
@@ -242,11 +247,9 @@ const ProductionStartNote = () => {
             <tfoot>
               <tr className="bg-gray-700 font-semibold">
                 <td colSpan="3" className="text-right px-4 py-2">
-                  Items Total
+                  Order Total Value
                 </td>
-                <td className="px-4 py-2">
-                  {(formData.orderTotalValue || 0).toFixed(2)}
-                </td>
+                <td className="px-4 py-2">{formData.orderTotalValue}</td>
               </tr>
             </tfoot>
           </table>
@@ -378,7 +381,7 @@ const ProductionStartNote = () => {
                   Extra Materials Total
                 </td>
                 <td className="px-4 py-2">
-                  {(Number(extraMaterialTotal) || 0).toFixed(2)}
+                  {(Number(formData.extraMaterialTotal) || 0).toFixed(2)}
                 </td>
               </tr>
             </tfoot>
@@ -398,7 +401,10 @@ const ProductionStartNote = () => {
           </div>
           <div>
             <Label>Final Cost</Label>
-            <TextInput readOnly value={finalValue.toFixed(2)} />
+            <TextInput
+              readOnly
+              value={(Number(formData.finalValue) || 0).toFixed(2)}
+            />
           </div>
         </div>
       </Card>
