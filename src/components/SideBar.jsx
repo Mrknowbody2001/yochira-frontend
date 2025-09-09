@@ -303,15 +303,15 @@ export default function SidebarMenu() {
             </SidebarItem>
             <SidebarItem
               className="text-[15px]"
-              href="?tab=ProductionApproval"
-              active={tab === "ProductionApproval"}
+              href="?tab=PendingPsnList"
+              active={tab === "PendingPsnList"}
             >
               Production Approval
             </SidebarItem>
             <SidebarItem
               className="text-[15px]"
-              href="?tab=StartedPSN"
-              active={tab === "StartedPSN"}
+              href="?tab=FinishedPSN"
+              active={tab === "FinishedPSN"}
             >
               Production Finished
             </SidebarItem>

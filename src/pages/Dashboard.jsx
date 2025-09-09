@@ -49,6 +49,9 @@ import DeliveryPSN from "../screens/Delivery/DeliveryPSN";
 import CreateDN from "../screens/Delivery/CreateDN";
 import DNList from "../screens/Delivery/DNList";
 import DashboardPage from "../screens/DashboardScreen";
+import PendingPsnList from "../screens/Production/pendingPsnList";
+import GetOnePendingPSN from "../screens/Production/GetOnePendingPSN";
+import FinishedPSN from "../screens/Production/FinishedPSN";
 const Dashboard = () => {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -130,8 +133,11 @@ const Dashboard = () => {
           {tab === "ApprovedCoList" && <ApprovedCoList />}
           {tab === "PSNRegister" && <PSNRegister />}
           {tab === "GetOnePsn" && <GetOnePsn />}
+          {tab === "PendingPsnList" && <PendingPsnList />}
+          {tab === "GetOnePendingPSN" && <GetOnePendingPSN />}
           {tab === "StartedPSN" && <StartedPSN />}
           {tab === "GetOneStartedPSN" && <GetOneStartedPSN />}
+          {tab === "FinishedPSN" && <FinishedPSN />}
 
           {/* qc  */}
           {tab === "QcRegister" && <QcRegister />}
@@ -142,15 +148,12 @@ const Dashboard = () => {
           {tab === "QcFailList" && <QcFailList />}
 
           {/* finished good stock */}
-          {tab === "FinishedGoodStockList" && <FinishedGoodStockList/>}
+          {tab === "FinishedGoodStockList" && <FinishedGoodStockList />}
 
           {/* Delivery */}
           {tab === "DeliveryPSN" && <DeliveryPSN />}
           {tab === "CreateDN" && <CreateDN />}
           {tab === "DNList" && <DNList />}
-          
-          
-
         </div>
       </div>
     </div>

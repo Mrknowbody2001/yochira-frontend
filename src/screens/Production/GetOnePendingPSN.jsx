@@ -2,18 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Label, TextInput, Textarea, Button, Card } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
 
-const GetOneStartedPSN = () => {
+const GetOnePendingPSN = () => {
   const [psnData, setPsnData] = useState(null);
-  const [finishedDate, setFinishedDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
 
   const navigate = useNavigate();
   const psnId = new URLSearchParams(window.location.search).get("id");
 
   useEffect(() => {
     if (psnId) {
-      fetch(`http://localhost:5009/api/psn/started/${psnId}`)
+      fetch(`http://localhost:5009/api/psn/pending/${psnId}`)
         .then((res) => res.json())
         .then((data) => setPsnData(data))
         .catch((err) => console.error("Error fetching PSN:", err));
@@ -21,23 +18,24 @@ const GetOneStartedPSN = () => {
   }, [psnId]);
 
   if (!psnData) return <p className="text-white">Loading PSN details...</p>;
-
+  console.log("PSN Data:", psnData); // Debugging line
   //   const finishedDate = new Date().toISOString().split("T")[0]; // Today
 
-  const handleFinish = async () => {
+  const handleApprove = async () => {
     try {
-      const res = await fetch(`http://localhost:5009/api/psn/finish/${psnId}`, {
+      const res = await fetch(`http://localhost:5009/api/psn/start/${psnId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ finishedDate }), // ✅ Send user-selected date
       });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to update PSN");
-      alert("PSN marked as Finished successfully");
-      navigate("/dashboard?tab=StartedPSN");
+      //
+      alert("PSN marked as Started successfully");
+      //
+      navigate("/dashboard?tab=PSNRegister");
     } catch (err) {
       alert(`Error: ${err.message}`);
     }
@@ -105,9 +103,9 @@ const GetOneStartedPSN = () => {
         <table className="w-full text-sm text-white border border-gray-700">
           <thead className="bg-gray-700">
             <tr>
-              <th className="px-4 py-2">Product</th>
+              <th className="px-4 py-2">Product Name</th>
               <th className="px-4 py-2">Qty</th>
-              <th className="px-4 py-2">Unit Price</th>
+              <th className="px-4 py-2">Selling Price</th>
               <th className="px-4 py-2">Total</th>
             </tr>
           </thead>
@@ -130,9 +128,7 @@ const GetOneStartedPSN = () => {
               <td colSpan="3" className="text-right px-4 py-2">
                 Order Total Value
               </td>
-              <td className="px-4 py-2">
-                {(psnData.orderTotalValue || 0).toFixed(2)}
-              </td>
+              <td className="px-4 py-2">{psnData.orderTotalValue}</td>
             </tr>
           </tfoot>
         </table>
@@ -179,32 +175,20 @@ const GetOneStartedPSN = () => {
             <TextInput readOnly value={psnData.otherCost.toFixed(2)} />
           </div>
           <div className="w-1/3">
-            <Label>Final value</Label>
+            <Label>Final Cost</Label>
             <TextInput readOnly value={psnData.finalValue.toFixed(2)} />
           </div>
         </div>
       </Card>
 
-      {/* Finished Date */}
-      <Card className="bg-gray-800 mb-6">
-        <div>
-          <Label>Finished Date</Label>
-          <TextInput
-            type="date"
-            value={finishedDate}
-            onChange={(e) => setFinishedDate(e.target.value)}
-          />
-        </div>
-      </Card>
-
       {/* Buttons */}
       <div className="flex gap-4">
-        <Button color="green" onClick={handleFinish}>
-          Finish PSN
+        <Button color="green" onClick={handleApprove}>
+          Start PSN
         </Button>
         <Button
           color="gray"
-          onClick={() => navigate("/dashboard?tab=StartedPSN")}
+          onClick={() => navigate("/dashboard?tab=PendingPsnList")}
         >
           Cancel
         </Button>
@@ -213,4 +197,4 @@ const GetOneStartedPSN = () => {
   );
 };
 
-export default GetOneStartedPSN;
+export default GetOnePendingPSN;

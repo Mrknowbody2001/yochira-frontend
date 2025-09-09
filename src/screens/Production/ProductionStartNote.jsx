@@ -61,7 +61,7 @@ const ProductionStartNote = () => {
       .then((data) =>
         setFormData((prev) => ({
           ...prev,
-          PSNNo: data, // not `data: data`
+          PSNNo: data.PSNNo, // not `data: data`
         }))
       )
       .catch((err) => console.error("Error fetching PSN No:", err));
@@ -134,27 +134,27 @@ const ProductionStartNote = () => {
     const formattedItems = items.map((i) => ({
       productId: i.productId || i.id,
       productName: i.productName || i.name,
-      qty: Number(i.orderQty || i.qty || 0),
-      sellingPrice: Number(i.sellingPrice || 0),
+      qty: Number(i.orderQty ?? i.qty ?? 0),
+      unitPrice: Number(i.sellingPrice ?? 0), //selling price map to unit price
       totalValue: Number(
-        i.itemTotalValue || (i.qty || i.orderQty) * i.sellingPrice || 0
+        i.itemTotalValue ?? (i.qty ?? i.orderQty ?? 0) * (i.sellingPrice ?? 0)
       ),
     }));
 
     const formattedExtraMaterials = extraMaterials.map((m) => ({
       materialId: m.materialId,
       materialName: m.materialName,
-      qty: Number(m.qty || 0),
-      unitPrice: Number(m.unitPrice || 0),
-      totalValue: Number(m.value || m.qty * m.unitPrice || 0),
+      qty: Number(m.qty ?? 0),
+      unitPrice: Number(m.unitPrice ?? 0),
+      totalValue: Number(m.totalValue ?? m.qty * m.unitPrice ?? 0), // FIXED
     }));
 
     const payload = {
       CONo: formData.CONo,
       customerId: formData.customerId,
       customerName: formData.customerName,
-      orderDate: formData.orderDate,
       orderTotalValue: formData.orderTotalValue,
+      orderDate: formData.orderDate,
       remark: formData.remark,
       PSNNo: formData.PSNNo,
       items: formattedItems,

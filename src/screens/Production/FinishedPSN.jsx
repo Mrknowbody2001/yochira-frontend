@@ -9,14 +9,14 @@ import {
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const StartedPSN = () => {
+const FinishedPSN = () => {
   const [psnList, setPsnList] = useState([]);
   const navigate = useNavigate();
 
-  // Fetch all PSNs
+  // Fetch all finished PSNs
   const fetchPSNs = async () => {
     try {
-      const res = await fetch("http://localhost:5009/api/psn/started/all");
+      const res = await fetch("http://localhost:5009/api/psn/finished/all");
       const data = await res.json();
       setPsnList(data || []);
       console.log("Fetched PSNs:", data);
@@ -32,11 +32,17 @@ const StartedPSN = () => {
   return (
     <div className="bg-[#172e75] text-white min-h-screen w-full p-6 rounded overflow-auto">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Started PSN List</h2>
+        <h2 className="text-xl font-semibold">PSN Register</h2>
+        <button
+          onClick={() => navigate("/dashboard?tab=StartedPSN")}
+          className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-white"
+        >
+          NEW PSN
+        </button>
       </div>
 
-      <div className="w-full overflow-auto bg-[#243b55] border border-2 rounded p-4">
-        <div className="min-w-[1200px] max-h-[500px] overflow-auto">
+      <div className="w-full overflow-auto bg-[#243b55] border border-2 rounded p-4 overflow-x-auto">
+        <div className="min-w-[1000px] max-h-[500px] overflow-y-auto">
           <Table striped>
             <TableHead>
               <TableRow>
@@ -47,6 +53,8 @@ const StartedPSN = () => {
                 <TableHeadCell>Final Cost</TableHeadCell>
                 <TableHeadCell>Remark</TableHeadCell>
                 <TableHeadCell>Status</TableHeadCell>
+                <TableHeadCell>PSN Date</TableHeadCell>
+                <TableHeadCell>PSN Finished Date</TableHeadCell>
                 <TableHeadCell>Action</TableHeadCell>
               </TableRow>
             </TableHead>
@@ -55,7 +63,7 @@ const StartedPSN = () => {
                 psnList.map((psn, index) => (
                   <TableRow key={psn._id || index}>
                     <TableCell>{psn.PSNNo}</TableCell>
-                    <TableCell>{psn.coNo}</TableCell>
+                    <TableCell>{psn.CONo}</TableCell>
                     <TableCell>
                       {psn.customerId} - {psn.customerName}
                     </TableCell>
@@ -68,8 +76,20 @@ const StartedPSN = () => {
                     <TableCell>{psn.remark}</TableCell>
                     <TableCell>{psn.status}</TableCell>
                     <TableCell>
+                      {" "}
+                      {psn.createdAt
+                        ? new Date(psn.createdAt).toLocaleDateString()
+                        : ""}
+                    </TableCell>
+                    <TableCell>
+                      {" "}
+                      {psn.finishedPSNDate
+                        ? new Date(psn.finishedPSNDate).toLocaleDateString()
+                        : ""}
+                    </TableCell>
+                    <TableCell>
                       <Link
-                        to={`/dashboard?tab=GetOneStartedPSN&id=${psn._id}`}
+                        to={`/dashboard?tab=GetOneFinishedPSN&id=${psn._id}`}
                         className="bg-blue-700 hover:bg-blue-800 text-white px-3 py-1 rounded"
                       >
                         View
@@ -79,7 +99,7 @@ const StartedPSN = () => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan="8" className="text-center py-4">
+                  <TableCell colSpan="10" className="text-center py-4">
                     No PSNs found.
                   </TableCell>
                 </TableRow>
@@ -92,4 +112,4 @@ const StartedPSN = () => {
   );
 };
 
-export default StartedPSN;
+export default FinishedPSN;

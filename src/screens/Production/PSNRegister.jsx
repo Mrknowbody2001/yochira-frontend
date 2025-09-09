@@ -41,8 +41,8 @@ const PSNRegister = () => {
         </button>
       </div>
 
-      <div className="w-full overflow-auto bg-[#243b55] border border-2 rounded p-4">
-        <div className="min-w-[1200px] max-h-[500px] overflow-auto">
+      <div className="w-full overflow-auto bg-[#243b55] border border-2 rounded p-4 overflow-x-auto">
+        <div className="min-w-[1000px] max-h-[500px] overflow-y-auto">
           <Table striped>
             <TableHead>
               <TableRow>
@@ -50,9 +50,10 @@ const PSNRegister = () => {
                 <TableHeadCell>CO No</TableHeadCell>
                 <TableHeadCell>Customer</TableHeadCell>
                 <TableHeadCell>Order Date</TableHeadCell>
-                <TableHeadCell>Final Value</TableHeadCell>
+                <TableHeadCell>Final Cost</TableHeadCell>
                 <TableHeadCell>Remark</TableHeadCell>
                 <TableHeadCell>Status</TableHeadCell>
+                <TableHeadCell>PSN Date</TableHeadCell>
                 <TableHeadCell>Action</TableHeadCell>
               </TableRow>
             </TableHead>
@@ -61,7 +62,7 @@ const PSNRegister = () => {
                 psnList.map((psn, index) => (
                   <TableRow key={psn._id || index}>
                     <TableCell>{psn.PSNNo}</TableCell>
-                    <TableCell>{psn.coNo}</TableCell>
+                    <TableCell>{psn.CONo}</TableCell>
                     <TableCell>
                       {psn.customerId} - {psn.customerName}
                     </TableCell>
@@ -73,6 +74,12 @@ const PSNRegister = () => {
                     <TableCell>{psn.finalValue?.toFixed(2)}</TableCell>
                     <TableCell>{psn.remark}</TableCell>
                     <TableCell>{psn.status}</TableCell>
+                    <TableCell>
+                      {" "}
+                      {psn.createdAt
+                        ? new Date(psn.createdAt).toLocaleDateString()
+                        : ""}
+                    </TableCell>
                     <TableCell>
                       <Link
                         to={`/dashboard?tab=GetOnePsn&id=${psn._id}`}

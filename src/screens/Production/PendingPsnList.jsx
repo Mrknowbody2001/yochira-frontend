@@ -9,14 +9,14 @@ import {
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const StartedPSN = () => {
+const PendingPsnList = () => {
   const [psnList, setPsnList] = useState([]);
   const navigate = useNavigate();
 
   // Fetch all PSNs
   const fetchPSNs = async () => {
     try {
-      const res = await fetch("http://localhost:5009/api/psn/started/all");
+      const res = await fetch("http://localhost:5009/api/psn/pending/all");
       const data = await res.json();
       setPsnList(data || []);
       console.log("Fetched PSNs:", data);
@@ -32,7 +32,7 @@ const StartedPSN = () => {
   return (
     <div className="bg-[#172e75] text-white min-h-screen w-full p-6 rounded overflow-auto">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Started PSN List</h2>
+        <h2 className="text-xl font-semibold">Pending PSN List</h2>
       </div>
 
       <div className="w-full overflow-auto bg-[#243b55] border border-2 rounded p-4">
@@ -44,7 +44,7 @@ const StartedPSN = () => {
                 <TableHeadCell>CO No</TableHeadCell>
                 <TableHeadCell>Customer</TableHeadCell>
                 <TableHeadCell>Order Date</TableHeadCell>
-                <TableHeadCell>Final Cost</TableHeadCell>
+                <TableHeadCell>Final Value</TableHeadCell>
                 <TableHeadCell>Remark</TableHeadCell>
                 <TableHeadCell>Status</TableHeadCell>
                 <TableHeadCell>Action</TableHeadCell>
@@ -69,7 +69,7 @@ const StartedPSN = () => {
                     <TableCell>{psn.status}</TableCell>
                     <TableCell>
                       <Link
-                        to={`/dashboard?tab=GetOneStartedPSN&id=${psn._id}`}
+                        to={`/dashboard?tab=GetOnePendingPSN&id=${psn._id}`}
                         className="bg-blue-700 hover:bg-blue-800 text-white px-3 py-1 rounded"
                       >
                         View
@@ -92,4 +92,4 @@ const StartedPSN = () => {
   );
 };
 
-export default StartedPSN;
+export default PendingPsnList;
