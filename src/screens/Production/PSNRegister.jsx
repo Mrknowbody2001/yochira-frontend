@@ -62,7 +62,7 @@ const PSNRegister = () => {
                 psnList.map((psn, index) => (
                   <TableRow key={psn._id || index}>
                     <TableCell>{psn.PSNNo}</TableCell>
-                    <TableCell>{psn.CONo}</TableCell>
+                    <TableCell>{psn.coNo}</TableCell>
                     <TableCell>
                       {psn.customerId} - {psn.customerName}
                     </TableCell>
