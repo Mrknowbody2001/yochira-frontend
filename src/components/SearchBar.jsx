@@ -6,7 +6,7 @@ const SearchBar = ({ value, onChange, placeholder }) => {
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className="px-3 py-2 rounded border border-gray-400 text-black"
+      className="px-3 py-1 bg-white rounded-full border border-gray-400 text-black"
     />
   );
 };

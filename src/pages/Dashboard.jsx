@@ -52,6 +52,7 @@ import DashboardPage from "../screens/DashboardScreen";
 import PendingPsnList from "../screens/Production/pendingPsnList";
 import GetOnePendingPSN from "../screens/Production/GetOnePendingPSN";
 import FinishedPSN from "../screens/Production/FinishedPSN";
+import COForm from "../screens/customerOrder/COForm";
 const Dashboard = () => {
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -72,7 +73,7 @@ const Dashboard = () => {
         {/* Header */}
         <Header />
 
-        <div className="flex-1 px-4  overflow-auto bg-[#172e75] min-h-screen">
+        <div className="flex-1   bg-[#172e75] min-h-screen">
           {/* dashboard  */}
           {tab === "DashboardPage" && <DashboardPage />}
 
@@ -101,14 +102,8 @@ const Dashboard = () => {
           {tab === "SOReceiveNoteList" && <SOReceiveNoteList />}
 
           {/* customer order section  */}
-          {tab === "CoRegister" && (
-            <CoRegister
-              id={new URLSearchParams(window.location.search).get("id")}
-              onCancel={() => {
-                window.location.href = "/dashboard?tab=CoRegister";
-              }}
-            />
-          )}
+          {tab === "CoRegister" && <CoRegister />}
+          {tab === "CoForm" && <COForm />}
 
           {tab === "GetOneCO" && (
             <GetOneCO
