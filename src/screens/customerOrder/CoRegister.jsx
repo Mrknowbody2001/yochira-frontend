@@ -47,13 +47,18 @@ const CoRegister = () => {
 
   //! search con
   const searchCON = async () => {
+    if (!searchCode.trim() && !searchName.trim()) {
+      console.log("No search criteria provided, skipping search.");
+      return; // stop search if nothing is typed
+    }
+
     try {
       const query = new URLSearchParams({
         code: searchCode.trim(),
         name: searchName.trim(),
       });
       const res = await fetch(
-        `http://localhost:5004/api/Customer-Order/co-list?${query.toString()}`
+        `http://localhost:5004/api/Customer-Order/search-co-list?${query.toString()}`
       );
       const data = await res.json();
       setCoList(data.customerOrders || []);
