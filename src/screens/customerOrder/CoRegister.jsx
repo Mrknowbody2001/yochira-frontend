@@ -110,7 +110,7 @@ const CoRegister = () => {
         />
         <button
           onClick={searchCON}
-          className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-full text-white"
+          className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-full text-white"
         >
           Search
         </button>
