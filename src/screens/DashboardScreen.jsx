@@ -98,7 +98,7 @@ const DashboardPage = () => {
       <h2 className="text-2xl font-bold mb-6">Dashboard</h2>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-6 gap-4 mb-6">
+      <div className="grid grid-cols-5 gap-4 mb-6">
         {[
           { title: "Customers", value: summary.customers },
           { title: "Suppliers", value: summary.suppliers },
@@ -107,18 +107,19 @@ const DashboardPage = () => {
           { title: "Delivery Notes", value: summary.deliveryNotes },
         ].map((item, i) => (
           <Card
+          
             key={i}
-            className="bg-[#243b70] text-center shadow-lg hover:bg-[#2d4a88] transition"
+            className="bg-[#243b70] w-30 h-20 text-center  shadow-lg hover:bg-[#2d4a88] transition"
           >
-            <h3 className="text-lg font-semibold">{item.title}</h3>
-            <p className="text-2xl font-bold">{item.value}</p>
+            <h3 className="text-sm font-semibold  ">{item.title}</h3>
+            <p className="text-sm text  font-bold">{item.value}</p>
           </Card>
         ))}
       </div>
 
       {/* Chart */}
       <div className="bg-[#243b70] p-4 rounded-lg mb-6 shadow hover:bg-[#2d4a88] transition">
-        <h3 className="text-lg font-semibold mb-2">Orders Overview</h3>
+        <h3 className="text-md font-semibold mb-2">Orders Overview</h3>
         <Bar data={chartData} />
       </div>
 
@@ -144,7 +145,7 @@ const DashboardPage = () => {
       <div className="grid grid-cols-2 gap-3">
         {/* Finished Goods Table */}
         <div className="bg-[#243b70] p-4 rounded-lg overflow-auto shadow hover:bg-[#2d4a88] transition">
-          <h3 className="text-lg font-semibold mb-4">Finished Goods</h3>
+          <h3 className="text-md font-semibold mb-4">Finished Goods</h3>
           <Table striped>
             <TableHead>
               <TableRow>
@@ -165,11 +166,11 @@ const DashboardPage = () => {
 
         {/* Material Table */}
         <div className="bg-[#243b70] p-4 rounded-lg overflow-auto shadow hover:bg-[#2d4a88] transition">
-          <h3 className="text-lg font-semibold mb-4">Materials</h3>
+          <h3 className="text-md font-semibold mb-4">Materials</h3>
           <Table striped>
             <TableHead>
               <TableRow>
-                <TableHeadCell>Material</TableHeadCell>
+                <TableHeadCell >Material</TableHeadCell>
                 <TableHeadCell>Stock</TableHeadCell>
               </TableRow>
             </TableHead>
