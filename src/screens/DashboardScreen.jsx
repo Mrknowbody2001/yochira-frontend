@@ -107,7 +107,6 @@ const DashboardPage = () => {
           { title: "Delivery Notes", value: summary.deliveryNotes },
         ].map((item, i) => (
           <Card
-          
             key={i}
             className="bg-[#243b70] w-30 h-20 text-center  shadow-lg hover:bg-[#2d4a88] transition"
           >
@@ -170,7 +169,7 @@ const DashboardPage = () => {
           <Table striped>
             <TableHead>
               <TableRow>
-                <TableHeadCell >Material</TableHeadCell>
+                <TableHeadCell>Material</TableHeadCell>
                 <TableHeadCell>Stock</TableHeadCell>
               </TableRow>
             </TableHead>
